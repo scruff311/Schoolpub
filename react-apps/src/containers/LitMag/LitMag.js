@@ -24,6 +24,7 @@ class LitMag extends Component {
         <div>
           <ul>
             <li>Salad fingers</li>
+            <li>Dungy poos</li>
           </ul>
         </div>
       </div>
