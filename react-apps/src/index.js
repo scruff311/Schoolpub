@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import LitMag from './containers/LitMag/LitMag';
 import registerServiceWorker from './registerServiceWorker';
+// import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import './index.css';
 
 ReactDOM.render(
 	<LitMag />,

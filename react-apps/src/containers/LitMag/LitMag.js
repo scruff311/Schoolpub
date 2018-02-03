@@ -1,8 +1,25 @@
 import React, { Component } from 'react';
+import {
+  Form,
+  FormGroup,
+  Button,
+  Col,
+} from 'react-bootstrap';
+import SchoolInfo from '../SchoolInfo/SchoolInfo';
+import classes from './LitMag.css';
 
 class LitMag extends Component {
   state = {
-    counter: 0,
+    schoolInfo: {
+      name: '',
+      advisorName: '',
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
+      phone: '',
+      email: '',
+    },
   };
 
   componentDidMount() {
@@ -17,16 +34,27 @@ class LitMag extends Component {
     });
   };
 
+  handleInputChange = (event, id) => {
+    const schoolInfo = { ...this.state.schoolInfo };
+    schoolInfo[id] = event.target.value;
+    this.setState({
+      schoolInfo: schoolInfo,
+    });
+  };
+
   render() {
     return (
-      <div className="LitMag">
-        <p>Lit Mag seconds since open: {this.state.counter}</p>
-        <div>
-          <ul>
-            <li>Salad fingers</li>
-            <li>Dungy poos</li>
-          </ul>
-        </div>
+      <div className={classes.LitMag}>
+        <h1>Literary Magazine Order Form</h1>
+        <SchoolInfo changed={this.handleInputChange} />
+        <Form horizontal>
+          <FormGroup>
+            <Col smOffset={2} sm={10}>
+              <Button type="submit">Sign in</Button>
+            </Col>
+          </FormGroup>
+        </Form>
+        <div className={classes.DivTest} />
       </div>
     );
   }
