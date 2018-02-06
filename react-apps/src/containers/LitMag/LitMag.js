@@ -33,11 +33,12 @@ class LitMag extends Component {
 
   componentDidMount() {}
 
-  handleInputChange = (event, id) => {
-    const schoolInfo = { ...this.state.schoolInfo };
-    schoolInfo[id] = event.target.value;
+  handleInputChange = (event, id, stateParamName) => {
+    const stateParam = { ...this.state[stateParamName] };
+    stateParam[id] =
+      stateParamName === 'files' ? event.target.files[0] : event.target.value;
     this.setState({
-      schoolInfo: schoolInfo,
+      [stateParamName]: stateParam,
     });
   };
 
@@ -49,6 +50,7 @@ class LitMag extends Component {
           title="Pricing"
           changed={this.handleInputChange}
           fields={priceFields}
+          stateData="price"
           price={{
             label: 'Total:',
             value: this.state.price.total,
@@ -63,11 +65,13 @@ class LitMag extends Component {
           title="School Information"
           changed={this.handleInputChange}
           fields={schoolInfoFields}
+          stateData="schoolInfo"
         />
         <HorizontalInputForm
           title="File Upload"
           changed={this.handleInputChange}
           fields={fileFields}
+          stateData="files"
           header="You may wish to compress your files to save transmission time. Files may be compressed as .zip or .sit files. PC users can use WinZip to create .zip files; Mac users should use Stuffit to create either .sit files or .zip (preferred) archives to prevent file corruption."
           footer={[
             'MAXIMUM FILE SIZE IS 64 MB!',

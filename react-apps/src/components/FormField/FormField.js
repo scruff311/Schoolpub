@@ -21,7 +21,7 @@ class FormField extends Component {
         <FormControl
           type={this.props.type}
           placeholder={this.props.placeholder}
-          onChange={event => this.props.changed(event, this.props.id)}
+          onChange={event => this.props.changed(event, this.props.id, this.props.dataHandle)}
           className={this.props.type === 'file' ? classes.FileInput : null}
         />
       );
@@ -30,7 +30,7 @@ class FormField extends Component {
         <FormControl
           componentClass={this.props.type}
           placeholder={this.props.placeholder}
-          onChange={event => this.props.changed(event, this.props.id)}
+          onChange={event => this.props.changed(event, this.props.id, this.props.dataHandle)}
         >
           {this.props.options.map((option, index) => {
             return (

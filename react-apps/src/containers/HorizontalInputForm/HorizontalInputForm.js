@@ -13,6 +13,7 @@ const horizontalInputForm = props => {
         id={field.id}
         labelText={field.label}
         type={field.type}
+        dataHandle={props.stateData}
         options={field.options}
         width={field.width}
         changed={props.changed}
