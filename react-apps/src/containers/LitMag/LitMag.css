@@ -8,15 +8,3 @@
 	height: 200px;
 	background-color: aqua;
 }
-
-.FormContainer {
-	margin: 40px auto;
-}
-
-.FormBody {
-	margin: 10px auto;
-	border-radius: 3px;
-	padding: 20px;
-	background-color: white;
-	box-shadow:  2px 2px 5px -2px rgba(68, 78, 87, 0.6);
-}

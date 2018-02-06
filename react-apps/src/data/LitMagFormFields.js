@@ -1,3 +1,14 @@
+export const priceFields = [
+  {
+    id: 'promo',
+    label: 'Promo Code',
+    type: 'text',
+    options: null,
+    width: 4,
+    error: null
+  },
+];
+
 export const schoolInfoFields = [
   {
     id: 'name',
@@ -114,5 +125,32 @@ export const schoolInfoFields = [
     options: null,
     width: 9,
     error: 'Please provide a contact email.',
+  },
+];
+
+export const fileFields = [
+  {
+    id: 'file1',
+    label: 'File 1',
+    type: 'file',
+    options: null,
+    width: 3,
+    error: 'A design file is required for submitting an order.'
+  },
+  {
+    id: 'file2',
+    label: 'File 2',
+    type: 'file',
+    options: null,
+    width: 3,
+    error: null
+  },
+  {
+    id: 'file3',
+    label: 'File 3',
+    type: 'file',
+    options: null,
+    width: 3,
+    error: null
   },
 ];

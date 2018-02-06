@@ -7,6 +7,7 @@ import {
   ControlLabel,
 } from 'react-bootstrap';
 import Aux from '../../hoc/Aux';
+import classes from './FormField.css';
 
 class FormField extends Component {
   state = {
@@ -15,12 +16,13 @@ class FormField extends Component {
 
   render() {
     let control = null;
-    if (this.props.type === 'text') {
+    if (this.props.type === 'text' || this.props.type === 'file') {
       control = (
         <FormControl
           type={this.props.type}
           placeholder={this.props.placeholder}
           onChange={event => this.props.changed(event, this.props.id)}
+          className={this.props.type === 'file' ? classes.FileInput : null}
         />
       );
     } else if (this.props.type === 'select') {
@@ -42,7 +44,7 @@ class FormField extends Component {
     }
 
     let errorAlert = null;
-    if (this.state.error) {
+    if (this.state.error && this.props.errorMsg) {
       errorAlert = (
         <Col smOffset={3}>
           <Alert bsStyle="danger">{this.props.errorMsg}</Alert>
