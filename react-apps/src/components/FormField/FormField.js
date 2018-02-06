@@ -21,7 +21,9 @@ class FormField extends Component {
         <FormControl
           type={this.props.type}
           placeholder={this.props.placeholder}
-          onChange={event => this.props.changed(event, this.props.id, this.props.dataHandle)}
+          onChange={event =>
+            this.props.changed(event, this.props.id, this.props.dataHandle)
+          }
           className={this.props.type === 'file' ? classes.FileInput : null}
         />
       );
@@ -30,7 +32,9 @@ class FormField extends Component {
         <FormControl
           componentClass={this.props.type}
           placeholder={this.props.placeholder}
-          onChange={event => this.props.changed(event, this.props.id, this.props.dataHandle)}
+          onChange={event =>
+            this.props.changed(event, this.props.id, this.props.dataHandle)
+          }
         >
           {this.props.options.map((option, index) => {
             return (
@@ -58,9 +62,7 @@ class FormField extends Component {
           <Col componentClass={ControlLabel} sm={3}>
             {this.props.labelText}
           </Col>
-          <Col sm={this.props.width}>
-            {control}
-          </Col>
+          <Col sm={this.props.width}>{control}</Col>
         </FormGroup>
         {errorAlert}
       </Aux>

@@ -57,7 +57,7 @@ class LitMag extends Component {
           }}
           footer={[
             'Ground shipping is included in the price.',
-            <br />,
+            <br key="break1" />,
             'If you need expedited shipping, please contact our office for pricing.',
           ]}
         />
@@ -75,7 +75,7 @@ class LitMag extends Component {
           header="You may wish to compress your files to save transmission time. Files may be compressed as .zip or .sit files. PC users can use WinZip to create .zip files; Mac users should use Stuffit to create either .sit files or .zip (preferred) archives to prevent file corruption."
           footer={[
             'MAXIMUM FILE SIZE IS 64 MB!',
-            <br />,
+            <br key="break2" />,
             'Files larger than 64 Mb will be rejected by the server! If you attach multiple files, the combined size can be no more than 64 MB. Call us if you need assistance.',
           ]}
         />
