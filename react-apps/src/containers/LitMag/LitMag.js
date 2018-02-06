@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Form,
-  FormGroup,
-  Button,
-  Col,
-} from 'react-bootstrap';
-import SchoolInfo from '../SchoolInfo/SchoolInfo';
+import { Form, FormGroup, Button } from 'react-bootstrap';
+import HorizontalInputForm from '../HorizontalInputForm/HorizontalInputForm';
 import classes from './LitMag.css';
+import { schoolInfoFields } from '../../data/LitMagFormFields';
 
 class LitMag extends Component {
   state = {
@@ -22,17 +18,7 @@ class LitMag extends Component {
     },
   };
 
-  componentDidMount() {
-    setInterval(this.increaseCount, 1000);
-  }
-
-  increaseCount = () => {
-    var count = this.state.counter;
-    count++;
-    this.setState({
-      counter: count,
-    });
-  };
+  componentDidMount() {}
 
   handleInputChange = (event, id) => {
     const schoolInfo = { ...this.state.schoolInfo };
@@ -46,15 +32,18 @@ class LitMag extends Component {
     return (
       <div className={classes.LitMag}>
         <h1>Literary Magazine Order Form</h1>
-        <SchoolInfo changed={this.handleInputChange} />
+        <HorizontalInputForm
+          title="School Information"
+          changed={this.handleInputChange}
+          fields={schoolInfoFields}
+        />
         <Form horizontal>
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Button type="submit">Sign in</Button>
-            </Col>
+          <FormGroup className="text-center">
+            <Button bsSize="large" type="submit" bsStyle="primary">
+              Submit Order
+            </Button>
           </FormGroup>
         </Form>
-        <div className={classes.DivTest} />
       </div>
     );
   }
