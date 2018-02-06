@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import {
   FormGroup,
   FormControl,
+  Radio,
+  Checkbox,
   Alert,
   Col,
   ControlLabel,
 } from 'react-bootstrap';
 import Aux from '../../hoc/Aux';
-import classes from './FormField.css';
+import TextAndFileInput from './TextAndFileInput';
+import DropdownInput from './DropdownInput';
+import RadioAndCheckboxGroup from './RadioAndCheckboxGroup';
 
 class FormField extends Component {
   state = {
@@ -18,33 +22,52 @@ class FormField extends Component {
     let control = null;
     if (this.props.type === 'text' || this.props.type === 'file') {
       control = (
-        <FormControl
+        <TextAndFileInput
           type={this.props.type}
           placeholder={this.props.placeholder}
-          onChange={event =>
-            this.props.changed(event, this.props.id, this.props.dataHandle)
-          }
-          className={this.props.type === 'file' ? classes.FileInput : null}
+          id={this.props.id}
+          changed={this.props.changed}
+          dataHandle={this.props.dataHandle}
         />
       );
     } else if (this.props.type === 'select') {
       control = (
-        <FormControl
-          componentClass={this.props.type}
+        <DropdownInput
           placeholder={this.props.placeholder}
-          onChange={event =>
-            this.props.changed(event, this.props.id, this.props.dataHandle)
-          }
-        >
-          {this.props.options.map((option, index) => {
-            return (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            );
-          })}
-        </FormControl>
+          id={this.props.id}
+          changed={this.props.changed}
+          dataHandle={this.props.dataHandle}
+          options={this.props.options}
+        />
       );
+    } else if (this.props.type === 'radio' || this.props.type === 'check') {
+      control = (
+        <RadioAndCheckboxGroup
+          type={this.props.type}
+          id={this.props.id}
+          changed={this.props.changed}
+          dataHandle={this.props.dataHandle}
+          options={this.props.options}
+          inline={false}
+        />
+      );
+
+      //   <FormControl
+      //     componentClass={this.props.type}
+      //     placeholder={this.props.placeholder}
+      //     onChange={event =>
+      //       this.props.changed(event, this.props.id, this.props.dataHandle)
+      //     }
+      //   >
+      //     {this.props.options.map((option, index) => {
+      //       return (
+      //         <option key={index} value={option}>
+      //           {option}
+      //         </option>
+      //       );
+      //     })}
+      //   </FormControl>
+      // );
     }
 
     let errorAlert = null;

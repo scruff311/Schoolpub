@@ -3,6 +3,7 @@ import { Form, FormGroup, Button } from 'react-bootstrap';
 import HorizontalInputForm from '../HorizontalInputForm/HorizontalInputForm';
 import classes from './LitMag.css';
 import {
+  publicationFields,
   priceFields,
   schoolInfoFields,
   fileFields,
@@ -10,6 +11,9 @@ import {
 
 class LitMag extends Component {
   state = {
+    pubInfo: {
+      coverPrinting: [],
+    },
     price: {
       promo: '',
       total: 1000.33333,
@@ -33,19 +37,61 @@ class LitMag extends Component {
 
   componentDidMount() {}
 
-  handleInputChange = (event, id, stateParamName) => {
-    const stateParam = { ...this.state[stateParamName] };
-    stateParam[id] =
-      stateParamName === 'files' ? event.target.files[0] : event.target.value;
+  handleInputChange = (event, id, type, stateParamName, option) => {
+    let stateParam = { ...this.state[stateParamName] };
+    // if an option is returned, this is a radio or checkbox
+    if (type === 'check' || type === 'radio') {
+      stateParam[id] = this.handleRadioOrCheckChange(
+        event,
+        type,
+        stateParam[id],
+        option,
+      );
+    } else {
+      stateParam[id] =
+        type === 'file' ? event.target.files[0] : event.target.value;
+    }
     this.setState({
       [stateParamName]: stateParam,
     });
+  };
+
+  handleRadioOrCheckChange = (event, type, currentState, option) => {
+    console.log(
+      'currentState: ' + currentState,
+      '\nvalue: ' + event.target.checked,
+      '\noption: ' + option,
+    );
+    if (type === 'check') {
+      // does the array already include this option?
+      if (currentState.includes(option)) {
+        const index = currentState.indexOf(option);
+        // if the box is unchecked, remove the option
+        if (!event.target.checked) {
+          currentState.splice(index, 1);
+        }
+      }
+      else {
+        // the option is not in the array, add it
+        if (event.target.checked) {
+          currentState.push(option);
+        }
+      }
+      return currentState;
+    }
+    return null;
   };
 
   render() {
     return (
       <div className={classes.LitMag}>
         <h1>Literary Magazine Order Form</h1>
+        <HorizontalInputForm
+          title="Publication Information"
+          changed={this.handleInputChange}
+          fields={publicationFields}
+          stateData="pubInfo"
+        />
         <HorizontalInputForm
           title="Pricing"
           changed={this.handleInputChange}

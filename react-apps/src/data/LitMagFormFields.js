@@ -1,3 +1,15 @@
+export const publicationFields = [
+  {
+    id: 'coverPrinting',
+    label: 'Cover Printing',
+    type: 'check',
+    options: ['Front Cover', 'Back Cover', 'Inside Front Cover', 'Inside Back Cover'],
+    width: 4,
+    error: null,
+    inline: false
+  },
+];
+
 export const priceFields = [
   {
     id: 'promo',
