@@ -2,6 +2,7 @@
   "extends": "react-app",
   "rules": {
     "quotes": ["error", "single"],
-		"no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "radix": "off"
   }
 }

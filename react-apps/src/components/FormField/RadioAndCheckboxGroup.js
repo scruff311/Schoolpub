@@ -7,13 +7,13 @@ const radioAndCheckboxGroup = props => {
     if (props.type === 'check') {
       return (
         <Aux key={index}>
-          <Checkbox
+					<Checkbox
+						name={props.name}
+						value={option}
             inline={props.inline}
             onChange={event =>
               props.changed(
                 event,
-                props.id,
-                props.type,
                 props.dataHandle,
                 option,
               )
@@ -23,7 +23,26 @@ const radioAndCheckboxGroup = props => {
           </Checkbox>{' '}
         </Aux>
       );
-    }
+    } else if (props.type === 'radio') {
+			return (
+        <Aux key={index}>
+					<Radio
+						name={props.name}
+						value={option}
+            inline={props.inline}
+            onChange={event =>
+              props.changed(
+                event,
+                props.dataHandle,
+                option,
+              )
+            }
+          >
+            {option}
+          </Radio>{' '}
+        </Aux>
+      );
+		}
 
     return null;
   });

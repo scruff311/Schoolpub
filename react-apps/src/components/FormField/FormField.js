@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import {
   FormGroup,
-  FormControl,
-  Radio,
-  Checkbox,
   Alert,
   Col,
   ControlLabel,
@@ -25,7 +22,6 @@ class FormField extends Component {
         <TextAndFileInput
           type={this.props.type}
           placeholder={this.props.placeholder}
-          id={this.props.id}
           changed={this.props.changed}
           dataHandle={this.props.dataHandle}
         />
@@ -34,7 +30,6 @@ class FormField extends Component {
       control = (
         <DropdownInput
           placeholder={this.props.placeholder}
-          id={this.props.id}
           changed={this.props.changed}
           dataHandle={this.props.dataHandle}
           options={this.props.options}
@@ -43,31 +38,14 @@ class FormField extends Component {
     } else if (this.props.type === 'radio' || this.props.type === 'check') {
       control = (
         <RadioAndCheckboxGroup
+          name={this.props.id}
           type={this.props.type}
-          id={this.props.id}
           changed={this.props.changed}
           dataHandle={this.props.dataHandle}
           options={this.props.options}
-          inline={false}
+          inline={this.props.inline}
         />
       );
-
-      //   <FormControl
-      //     componentClass={this.props.type}
-      //     placeholder={this.props.placeholder}
-      //     onChange={event =>
-      //       this.props.changed(event, this.props.id, this.props.dataHandle)
-      //     }
-      //   >
-      //     {this.props.options.map((option, index) => {
-      //       return (
-      //         <option key={index} value={option}>
-      //           {option}
-      //         </option>
-      //       );
-      //     })}
-      //   </FormControl>
-      // );
     }
 
     let errorAlert = null;

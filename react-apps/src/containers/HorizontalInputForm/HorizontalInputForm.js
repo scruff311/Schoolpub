@@ -16,6 +16,7 @@ const horizontalInputForm = props => {
         dataHandle={props.stateData}
         options={field.options}
         width={field.width}
+        inline={field.inline}
         changed={props.changed}
         errorMsg={field.error}
       />

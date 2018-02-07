@@ -11,7 +11,7 @@ const textAndFileInput = props => {
       type={props.type}
       placeholder={props.placeholder}
       onChange={event =>
-        props.changed(event, props.id, props.type, props.dataHandle)
+        props.changed(event, props.dataHandle)
       }
       style={props.type === 'file' ? fileStyle : null}
     />

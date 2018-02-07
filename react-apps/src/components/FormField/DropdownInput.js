@@ -6,7 +6,7 @@ const dropdownInput = props => {
     <FormControl
       componentClass='select'
       placeholder={props.placeholder}
-      onChange={event => props.changed(event, props.id, 'select', props.dataHandle)}
+      onChange={event => props.changed(event, props.dataHandle)}
     >
       {props.options.map((option, index) => {
         return (

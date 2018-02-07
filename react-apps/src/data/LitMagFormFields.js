@@ -1,12 +1,66 @@
 export const publicationFields = [
   {
+    id: 'name',
+    label: 'Publication Name',
+    type: 'text',
+    options: null,
+    width: 9,
+    error: 'Please provide a publication name.',
+    inline: null,
+  },
+  {
+    id: 'insidePages',
+    label: 'Number of Inside Pages',
+    type: 'select',
+    options: [], //filled in LitMag.js
+    width: 2,
+    error: 'Please choose the number of pages inside the magazine.',
+    inline: null,
+  },
+  {
+    id: 'colorPages',
+    label: 'Number of Color Pages',
+    type: 'select',
+    options: [0], //filled in LitMag.js
+    width: 2,
+    error: null,
+    inline: null,
+  },
+  {
+    id: 'paperStock',
+    label: 'Paper Stock',
+    type: 'radio',
+    options: ['Offset', 'Coated'],
+    width: 9,
+    error: 'Please choose a paper stock.',
+    inline: true,
+  },
+  {
+    id: 'coverStock',
+    label: 'Cover Stock',
+    type: 'radio',
+    options: ['Self Cover', 'Soft Cover'],
+    width: 9,
+    error: 'Please choose a cover stock.',
+    inline: true,
+  },
+  {
     id: 'coverPrinting',
     label: 'Cover Printing',
     type: 'check',
     options: ['Front Cover', 'Back Cover', 'Inside Front Cover', 'Inside Back Cover'],
     width: 4,
-    error: null,
-    inline: false
+    error: 'Please choose a which cover printing options you would like.',
+    inline: false,
+  },
+  {
+    id: 'binding',
+    label: 'Binding',
+    type: 'radio',
+    options: ['Saddle Stiched', 'Square Back', 'Perfect Bound'],
+    width: 9,
+    error: 'Please choose a binding.',
+    inline: true,
   },
 ];
 
@@ -17,7 +71,8 @@ export const priceFields = [
     type: 'text',
     options: null,
     width: 4,
-    error: null
+    error: null,
+    inline: null,
   },
 ];
 
@@ -29,6 +84,7 @@ export const schoolInfoFields = [
     options: null,
     width: 9,
     error: 'Please provide a school name.',
+    inline: null,
   },
   {
     id: 'advisorName',
@@ -37,6 +93,7 @@ export const schoolInfoFields = [
     options: null,
     width: 9,
     error: 'Please provide an advisor name.',
+    inline: null,
   },
   {
     id: 'address',
@@ -45,6 +102,7 @@ export const schoolInfoFields = [
     options: null,
     width: 9,
     error: 'Please provide a street address.',
+    inline: null,
   },
   {
     id: 'city',
@@ -53,6 +111,7 @@ export const schoolInfoFields = [
     options: null,
     width: 9,
     error: 'Please provide a city or town.',
+    inline: null,
   },
   {
     id: 'state',
@@ -113,6 +172,7 @@ export const schoolInfoFields = [
     ],
     width: 2,
     error: 'Please provide a state.',
+    inline: null,
   },
   {
     id: 'zip',
@@ -121,6 +181,7 @@ export const schoolInfoFields = [
     options: null,
     width: 2,
     error: 'Please provide a zip code.',
+    inline: null,
   },
   {
     id: 'phone',
@@ -129,6 +190,7 @@ export const schoolInfoFields = [
     options: null,
     width: 3,
     error: 'Please provide a contact phone number.',
+    inline: null,
   },
   {
     id: 'email',
@@ -137,6 +199,7 @@ export const schoolInfoFields = [
     options: null,
     width: 9,
     error: 'Please provide a contact email.',
+    inline: null,
   },
 ];
 
@@ -147,7 +210,8 @@ export const fileFields = [
     type: 'file',
     options: null,
     width: 3,
-    error: 'A design file is required for submitting an order.'
+    error: 'A design file is required for submitting an order.',
+    inline: null,
   },
   {
     id: 'file2',
@@ -155,7 +219,8 @@ export const fileFields = [
     type: 'file',
     options: null,
     width: 3,
-    error: null
+    error: null,
+    inline: null,
   },
   {
     id: 'file3',
@@ -163,6 +228,7 @@ export const fileFields = [
     type: 'file',
     options: null,
     width: 3,
-    error: null
+    error: null,
+    inline: null,
   },
 ];

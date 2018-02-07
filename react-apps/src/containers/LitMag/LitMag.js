@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Button } from 'react-bootstrap';
 import HorizontalInputForm from '../HorizontalInputForm/HorizontalInputForm';
+import _ from 'lodash';
 import classes from './LitMag.css';
 import {
   publicationFields,
@@ -12,7 +13,11 @@ import {
 class LitMag extends Component {
   state = {
     pubInfo: {
+      name: '',
+      paperStock: '',
+      coverStock: '',
       coverPrinting: [],
+      binding: '',
     },
     price: {
       promo: '',
@@ -33,48 +38,55 @@ class LitMag extends Component {
       file2: null,
       file3: null,
     },
+    publicationFields: publicationFields,
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    console.log('componentDidMount');
+    this.populateDropdownOptions('publicationFields', 'insidePages', 12, 160, 4);
+    this.populateDropdownOptions('publicationFields', 'colorPages', 0, 12, 1);
+  }
 
-  handleInputChange = (event, id, type, stateParamName, option) => {
+  handleInputChange = (event, stateParamName) => {
     let stateParam = { ...this.state[stateParamName] };
-    // if an option is returned, this is a radio or checkbox
-    if (type === 'check' || type === 'radio') {
-      stateParam[id] = this.handleRadioOrCheckChange(
-        event,
-        type,
-        stateParam[id],
-        option,
+    const target = event.target;
+    const identifier =
+      target.type === 'checkbox' || target.type === 'radio'
+        ? target.name
+        : target.id;
+    // a checkbox could have an array of values, so we need to handle this separately
+    if (target.type === 'checkbox') {
+      stateParam[identifier] = this.handleCheckboxChange(
+        target,
+        stateParam[identifier],
       );
     } else {
-      stateParam[id] =
-        type === 'file' ? event.target.files[0] : event.target.value;
+      stateParam[identifier] =
+        target.type === 'file' ? target.files[0] : target.value;
     }
     this.setState({
       [stateParamName]: stateParam,
     });
+
+    // when we change the number of pages, we need to update the # color pages dropdown
+    if (identifier === 'insidePages') {
+      this.populateDropdownOptions('publicationFields', 'colorPages', 0, parseInt(target.value), 1);
+    }
   };
 
-  handleRadioOrCheckChange = (event, type, currentState, option) => {
-    console.log(
-      'currentState: ' + currentState,
-      '\nvalue: ' + event.target.checked,
-      '\noption: ' + option,
-    );
-    if (type === 'check') {
+  handleCheckboxChange = (target, currentState) => {
+    if (target.type === 'checkbox') {
       // does the array already include this option?
-      if (currentState.includes(option)) {
-        const index = currentState.indexOf(option);
+      if (currentState.includes(target.value)) {
+        const index = currentState.indexOf(target.value);
         // if the box is unchecked, remove the option
-        if (!event.target.checked) {
+        if (!target.checked) {
           currentState.splice(index, 1);
         }
-      }
-      else {
+      } else {
         // the option is not in the array, add it
-        if (event.target.checked) {
-          currentState.push(option);
+        if (target.checked) {
+          currentState.push(target.value);
         }
       }
       return currentState;
@@ -82,7 +94,26 @@ class LitMag extends Component {
     return null;
   };
 
+  populateDropdownOptions = (fieldsKey, fieldId, min, max, step) => {
+    // find the field object with the given id
+    let fields = [ ...this.state[fieldsKey] ];
+    let fieldData = fields.find(element => {
+      return element.id === fieldId;
+    });
+    // if we found the object, create the array and apply it
+    if (fieldData) {
+      // create the array, starting with min, going to max by the specified step
+      fieldData.options = _.range(min, max+step, step);
+      const fieldIndex = fields.indexOf(fieldData);
+      fields[fieldIndex] = fieldData;
+      this.setState({
+        [fieldsKey]: fields,
+      });
+    }
+  }
+
   render() {
+    console.log('render()');
     return (
       <div className={classes.LitMag}>
         <h1>Literary Magazine Order Form</h1>
@@ -127,7 +158,7 @@ class LitMag extends Component {
         />
         <Form horizontal>
           <FormGroup className="text-center">
-            <Button bsSize="large" type="submit" bsStyle="primary">
+            <Button bsSize="large" bsStyle="primary" onClick={this.populateDropdownOptions}>
               Submit Order
             </Button>
           </FormGroup>
