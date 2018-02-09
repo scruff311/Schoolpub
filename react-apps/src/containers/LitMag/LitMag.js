@@ -14,6 +14,8 @@ class LitMag extends Component {
   state = {
     pubInfo: {
       name: '',
+      dimensions: '',
+      customDimensions: '', //if dimensions = 'Other', we use this field
       paperStock: '',
       coverStock: '',
       coverPrinting: [],
@@ -61,7 +63,7 @@ class LitMag extends Component {
         stateParam[identifier],
       );
     } else {
-      stateParam[identifier] =
+        stateParam[identifier] =
         target.type === 'file' ? target.files[0] : target.value;
     }
     this.setState({
@@ -72,6 +74,8 @@ class LitMag extends Component {
     if (identifier === 'insidePages') {
       this.populateDropdownOptions('publicationFields', 'colorPages', 0, parseInt(target.value), 1);
     }
+
+    console.log('')
   };
 
   handleCheckboxChange = (target, currentState) => {
@@ -112,6 +116,10 @@ class LitMag extends Component {
     }
   }
 
+  // setCustomRadioRef = (ref) => {
+  //   this.customDimensionRef = ref;
+  // };
+
   render() {
     console.log('render()');
     return (
@@ -120,7 +128,7 @@ class LitMag extends Component {
         <HorizontalInputForm
           title="Publication Information"
           changed={this.handleInputChange}
-          fields={publicationFields}
+          fields={this.state.publicationFields}
           stateData="pubInfo"
         />
         <HorizontalInputForm

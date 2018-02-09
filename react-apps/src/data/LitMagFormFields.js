@@ -9,6 +9,17 @@ export const publicationFields = [
     inline: null,
   },
   {
+    id: 'dimensions',
+    label: 'Finished Book Size (inches)',
+    placeholder: 'Example: 5 x 10',
+    type: 'radio',
+    options: ['7 x 10', '8 x 8', '8.5 x 11', '5.5 x 8.5', '5 x 8', 'Other'],
+    customFieldId: 'customDimensions',
+    width: 9,
+    error: 'Please choose the dimensions for your magazine.',
+    inline: false,
+  },
+  {
     id: 'insidePages',
     label: 'Number of Inside Pages',
     type: 'select',

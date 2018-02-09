@@ -40,7 +40,9 @@ class FormField extends Component {
         <RadioAndCheckboxGroup
           name={this.props.id}
           type={this.props.type}
+          placeholder={this.props.placeholder}
           changed={this.props.changed}
+          customFieldId={this.props.customFieldId}
           dataHandle={this.props.dataHandle}
           options={this.props.options}
           inline={this.props.inline}

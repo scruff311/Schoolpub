@@ -12,12 +12,14 @@ const horizontalInputForm = props => {
         key={index}
         id={field.id}
         labelText={field.label}
+        placeholder={field.placeholder}
         type={field.type}
         dataHandle={props.stateData}
         options={field.options}
         width={field.width}
         inline={field.inline}
         changed={props.changed}
+        customFieldId={field.customFieldId}
         errorMsg={field.error}
       />
     );
