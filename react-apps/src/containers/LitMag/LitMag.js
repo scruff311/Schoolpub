@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Button } from 'react-bootstrap';
+import { Form, FormGroup, Button, Checkbox } from 'react-bootstrap';
 import HorizontalInputForm from '../HorizontalInputForm/HorizontalInputForm';
 import _ from 'lodash';
 import classes from './LitMag.css';
@@ -10,12 +10,26 @@ import {
   fileFields,
 } from '../../data/LitMagFormFields';
 
+const pagesToColor = {
+  id: 'pagesToColor',
+  label: 'Which Pages in Color',
+  placeholder: 'Example: 1, 3-6, 10, 12',
+  type: 'text',
+  options: null,
+  width: 4,
+  error: 'Please indicate which pages you would like to be in color.',
+  inline: null,
+};
+
 class LitMag extends Component {
   state = {
     pubInfo: {
       name: '',
       dimensions: '',
       customDimensions: '', //if dimensions = 'Other', we use this field
+      insidePages: 12,
+      colorPages: 0,
+      pagesToColor: '',
       paperStock: '',
       coverStock: '',
       coverPrinting: [],
@@ -41,11 +55,18 @@ class LitMag extends Component {
       file3: null,
     },
     publicationFields: publicationFields,
+    priceQuoteToggle: false,
   };
 
   componentDidMount() {
     console.log('componentDidMount');
-    this.populateDropdownOptions('publicationFields', 'insidePages', 12, 160, 4);
+    this.populateDropdownOptions(
+      'publicationFields',
+      'insidePages',
+      12,
+      160,
+      4,
+    );
     this.populateDropdownOptions('publicationFields', 'colorPages', 0, 12, 1);
   }
 
@@ -63,7 +84,7 @@ class LitMag extends Component {
         stateParam[identifier],
       );
     } else {
-        stateParam[identifier] =
+      stateParam[identifier] =
         target.type === 'file' ? target.files[0] : target.value;
     }
     this.setState({
@@ -72,10 +93,24 @@ class LitMag extends Component {
 
     // when we change the number of pages, we need to update the # color pages dropdown
     if (identifier === 'insidePages') {
-      this.populateDropdownOptions('publicationFields', 'colorPages', 0, parseInt(target.value), 1);
+      this.populateDropdownOptions(
+        'publicationFields',
+        'colorPages',
+        0,
+        parseInt(target.value),
+        1,
+      );
     }
 
-    console.log('')
+    // we need to display/hide the field for specifying which pages are in color
+    if (identifier === 'colorPages') {
+      this.toggleDependentField(
+        'publicationFields',
+        'colorPages',
+        pagesToColor,
+        parseInt(target.value),
+      );
+    }
   };
 
   handleCheckboxChange = (target, currentState) => {
@@ -100,31 +135,119 @@ class LitMag extends Component {
 
   populateDropdownOptions = (fieldsKey, fieldId, min, max, step) => {
     // find the field object with the given id
-    let fields = [ ...this.state[fieldsKey] ];
+    let fields = [...this.state[fieldsKey]];
     let fieldData = fields.find(element => {
       return element.id === fieldId;
     });
     // if we found the object, create the array and apply it
     if (fieldData) {
       // create the array, starting with min, going to max by the specified step
-      fieldData.options = _.range(min, max+step, step);
+      fieldData.options = _.range(min, max + step, step);
       const fieldIndex = fields.indexOf(fieldData);
       fields[fieldIndex] = fieldData;
       this.setState({
         [fieldsKey]: fields,
       });
     }
-  }
+  };
 
-  // setCustomRadioRef = (ref) => {
-  //   this.customDimensionRef = ref;
-  // };
+  toggleDependentField = (
+    fieldsKey,
+    parentFieldId,
+    childField,
+    parentValue,
+  ) => {
+    let fields = [...this.state[fieldsKey]];
+    let childIndex = fields.findIndex(element => {
+      return element.id === childField.id;
+    });
+
+    if (childIndex === -1) {
+      // child does not appear in the state
+      if (parentValue > 0) {
+        // > 0, show the child field
+        const parentIndex = fields.findIndex(element => {
+          return element.id === parentFieldId;
+        });
+        if (parentIndex !== -1) {
+          fields.splice(parentIndex + 1, 0, childField); // add it just after the parent field
+        }
+      }
+    } else if (parentValue === 0) {
+      // child is present but parent = 0, remove the child field
+      fields.splice(childIndex, 1);
+    }
+    this.setState({
+      [fieldsKey]: fields,
+    });
+  };
 
   render() {
-    console.log('render()');
+    const title =
+      this.props.type === 'order-form'
+        ? 'Literary Magazine Order Form'
+        : 'Literary Magazine Pricing';
+
+    const priceQuoteToggle = (
+      <Checkbox
+        name="priceQuoteToggle"
+        onChange={() => {
+          let toggleState = this.state.priceQuoteToggle;
+          this.setState({
+            priceQuoteToggle: !toggleState,
+          });
+        }}
+      >
+        Submit for Formal Quote from SPC
+      </Checkbox>
+    );
+
+    const schoolInfoForm = (
+      <HorizontalInputForm
+        title="School Information"
+        changed={this.handleInputChange}
+        fields={schoolInfoFields}
+        stateData="schoolInfo"
+      />
+    );
+
+    const fileUploadForm = (
+      <HorizontalInputForm
+        title="File Upload"
+        changed={this.handleInputChange}
+        fields={fileFields}
+        stateData="files"
+        header="You may wish to compress your files to save transmission time. Files may be compressed as .zip or .sit files. PC users can use WinZip to create .zip files; Mac users should use Stuffit to create either .sit files or .zip (preferred) archives to prevent file corruption."
+        footer={[
+          'MAXIMUM FILE SIZE IS 64 MB!',
+          <br key="break2" />,
+          'Files larger than 64 Mb will be rejected by the server! If you attach multiple files, the combined size can be no more than 64 MB. Call us if you need assistance.',
+        ]}
+      />
+    );
+
+    const submitButton = (
+      <Form horizontal>
+        <FormGroup className="text-center">
+          <Button
+            bsSize="large"
+            bsStyle="primary"
+            onClick={this.populateDropdownOptions}
+          >
+            {this.props.type === 'order-form'
+              ? 'Submit Order'
+              : 'Submit for Quote'}
+          </Button>
+        </FormGroup>
+      </Form>
+    );
+
     return (
       <div className={classes.LitMag}>
-        <h1>Literary Magazine Order Form</h1>
+        <h1>{title}</h1>
+        {this.props.type === 'pricing'
+          ? <h4 style={{ marginTop: 30, color: '#777' }}>SPC has the lowest magazine prices in the industry and the fastest production time, with just a 5 business day turnaround (plus shipping time).</h4>
+          : null}
         <HorizontalInputForm
           title="Publication Information"
           changed={this.handleInputChange}
@@ -146,31 +269,14 @@ class LitMag extends Component {
             'If you need expedited shipping, please contact our office for pricing.',
           ]}
         />
-        <HorizontalInputForm
-          title="School Information"
-          changed={this.handleInputChange}
-          fields={schoolInfoFields}
-          stateData="schoolInfo"
-        />
-        <HorizontalInputForm
-          title="File Upload"
-          changed={this.handleInputChange}
-          fields={fileFields}
-          stateData="files"
-          header="You may wish to compress your files to save transmission time. Files may be compressed as .zip or .sit files. PC users can use WinZip to create .zip files; Mac users should use Stuffit to create either .sit files or .zip (preferred) archives to prevent file corruption."
-          footer={[
-            'MAXIMUM FILE SIZE IS 64 MB!',
-            <br key="break2" />,
-            'Files larger than 64 Mb will be rejected by the server! If you attach multiple files, the combined size can be no more than 64 MB. Call us if you need assistance.',
-          ]}
-        />
-        <Form horizontal>
-          <FormGroup className="text-center">
-            <Button bsSize="large" bsStyle="primary" onClick={this.populateDropdownOptions}>
-              Submit Order
-            </Button>
-          </FormGroup>
-        </Form>
+        {this.props.type === 'pricing' ? priceQuoteToggle : null}
+        {this.props.type === 'order-form' || this.state.priceQuoteToggle
+          ? schoolInfoForm
+          : null}
+        {this.props.type === 'order-form' ? fileUploadForm : null}
+        {this.props.type === 'order-form' || this.state.priceQuoteToggle
+          ? submitButton
+          : null}
       </div>
     );
   }

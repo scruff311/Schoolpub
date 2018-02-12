@@ -6,9 +6,14 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
 ReactDOM.render(
-	<LitMag />,
+	<LitMag type='order-form'/>,
 	document.getElementById('react-lit-mag-container')
 );
+
+// ReactDOM.render(
+// 	<LitMag type='pricing'/>,
+// 	document.getElementById('react-lit-mag-pricing-container')
+// );
 
 // ReactDOM.render(
 // 	<AnotherComponent />,
