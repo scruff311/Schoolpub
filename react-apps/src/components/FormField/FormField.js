@@ -4,6 +4,8 @@ import {
   Alert,
   Col,
   ControlLabel,
+  Popover,
+  OverlayTrigger,
 } from 'react-bootstrap';
 import Aux from '../../hoc/Aux';
 import TextAndFileInput from './TextAndFileInput';
@@ -14,6 +16,38 @@ class FormField extends Component {
   state = {
     error: false,
   };
+
+  buildHelpPopover = (labelText) => {
+    const popoverBody = this.props.help.map((helpItem, index) => {
+      return (
+        <Aux key={index}>
+          <strong>{helpItem.title}</strong> {helpItem.text}
+          {this.props.help.length !== index + 1 ? <br /> : null}
+        </Aux>
+      );
+    });
+
+    const popoverHover = (
+      <Popover id="popover-trigger-hover" title={labelText}>
+        {popoverBody}
+      </Popover>
+    );
+
+    const helpIcon = (
+      <OverlayTrigger
+        trigger={['hover', 'focus']}
+        placement="bottom"
+        overlay={popoverHover}
+      >
+        <span className="glyphicon glyphicon-question-sign" />
+      </OverlayTrigger>
+    );
+    return (
+      <Aux>
+        {labelText} {helpIcon}
+      </Aux>
+    );
+  }
 
   render() {
     let control = null;
@@ -59,11 +93,16 @@ class FormField extends Component {
       );
     }
 
+    let label = this.props.labelText;
+    if (this.props.help) {
+      label = this.buildHelpPopover(label);
+    }
+
     return (
       <Aux>
         <FormGroup controlId={this.props.id}>
           <Col componentClass={ControlLabel} sm={3}>
-            {this.props.labelText}
+            {label}
           </Col>
           <Col sm={this.props.width}>{control}</Col>
         </FormGroup>

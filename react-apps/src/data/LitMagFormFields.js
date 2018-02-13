@@ -44,6 +44,16 @@ export const publicationFields = [
     options: ['Offset', 'Coated'],
     width: 9,
     error: 'Please choose a paper stock.',
+    help: [
+      {
+        title: 'Offset:',
+        text: 'This is the offset paper type.'
+      },
+      {
+        title: 'Coated:',
+        text: 'This is the coated paper type.'
+      },
+    ],
     inline: true,
   },
   {
@@ -53,6 +63,16 @@ export const publicationFields = [
     options: ['Self Cover', 'Soft Cover'],
     width: 9,
     error: 'Please choose a cover stock.',
+    help: [
+      {
+        title: 'Self Cover:',
+        text: 'This is the self cover.'
+      },
+      {
+        title: 'Soft Cover:',
+        text: 'This is the soft cover.'
+      },
+    ],
     inline: true,
   },
   {
@@ -71,6 +91,20 @@ export const publicationFields = [
     options: ['Saddle Stiched', 'Square Back', 'Perfect Bound'],
     width: 9,
     error: 'Please choose a binding.',
+    help: [
+      {
+        title: 'Saddle Stitched:',
+        text: 'This is the saddle stitched binding type.'
+      },
+      {
+        title: 'Square Back:',
+        text: 'This is the square back binding type.'
+      },
+      {
+        title: 'Perfect Bound:',
+        text: 'This is the perfect bound binding type.'
+      },
+    ],
     inline: true,
   },
 ];
@@ -83,6 +117,12 @@ export const priceFields = [
     options: null,
     width: 4,
     error: null,
+    help: [
+      {
+        title: 'Early Bird Pricing:',
+        text: 'This can be applied to any magazine printed before April 15. Enter the promo code LM-Early to receive the 10% Early Bird discount.'
+      },
+    ],
     inline: null,
   },
 ];

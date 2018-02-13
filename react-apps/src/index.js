@@ -10,10 +10,10 @@ ReactDOM.render(
 	document.getElementById('react-lit-mag-container')
 );
 
-// ReactDOM.render(
-// 	<LitMag type='pricing'/>,
-// 	document.getElementById('react-lit-mag-pricing-container')
-// );
+ReactDOM.render(
+	<LitMag type='pricing'/>,
+	document.getElementById('react-lit-mag-pricing-container')
+);
 
 // ReactDOM.render(
 // 	<AnotherComponent />,

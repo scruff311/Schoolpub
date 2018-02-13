@@ -21,6 +21,7 @@ const horizontalInputForm = props => {
         changed={props.changed}
         customFieldId={field.customFieldId}
         errorMsg={field.error}
+        help={field.help}
       />
     );
   });
