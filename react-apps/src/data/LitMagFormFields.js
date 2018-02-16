@@ -47,30 +47,30 @@ export const publicationFields = [
     help: [
       {
         title: 'Offset:',
-        text: 'This is the offset paper type.'
+        text: 'This is a 60lb uncoated or matte finish paper similar to the paper in your personal printer.'
       },
       {
         title: 'Coated:',
-        text: 'This is the coated paper type.'
+        text: 'This is a 80lb glossy finish paper similar to that of a traditional magazine.'
       },
     ],
     inline: true,
   },
   {
-    id: 'coverStock',
-    label: 'Cover Stock',
+    id: 'coverStyle',
+    label: 'Cover Style',
     type: 'radio',
-    options: ['Self Cover', 'Soft Cover'],
+    options: ['Self-Cover', 'Soft-Cover'],
     width: 9,
-    error: 'Please choose a cover stock.',
+    error: 'Please choose a cover style.',
     help: [
       {
-        title: 'Self Cover:',
-        text: 'This is the self cover.'
+        title: 'Self-Cover:',
+        text: 'The thickness of the cover paper will be the same as the inside pages.'
       },
       {
-        title: 'Soft Cover:',
-        text: 'This is the soft cover.'
+        title: 'Soft-Cover:',
+        text: 'The cover paper will be slightly thicker than the inside pages.'
       },
     ],
     inline: true,
@@ -94,15 +94,15 @@ export const publicationFields = [
     help: [
       {
         title: 'Saddle Stitched:',
-        text: 'This is the saddle stitched binding type.'
+        text: 'With this binding method, the pages and cover are stapled together at the spine.'
       },
       {
         title: 'Square Back:',
-        text: 'This is the square back binding type.'
+        text: 'With this binding method, the pages and cover are stapled together at the spine. The spine is folded to create a squared look that appears like a perfect binding with no additional cost. Only available for coated books up to 32 pages and offset books up to 100 pages.'
       },
       {
         title: 'Perfect Bound:',
-        text: 'This is the perfect bound binding type.'
+        text: 'With this binding method, the pages and cover are glued together at the spine with a strong yet flexible thermal glue. The other three sides of the book are then trimmed as needed to give them clean “perfect” edges.'
       },
     ],
     inline: true,

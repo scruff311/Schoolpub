@@ -31,7 +31,7 @@ class LitMag extends Component {
       colorPages: 0,
       pagesToColor: '',
       paperStock: '',
-      coverStock: '',
+      coverStyle: '',
       coverPrinting: [],
       binding: '',
     },
@@ -245,14 +245,19 @@ class LitMag extends Component {
     return (
       <div className={classes.LitMag}>
         <h1>{title}</h1>
-        {this.props.type === 'pricing'
-          ? <h4 style={{ marginTop: 30, color: '#777' }}>SPC has the lowest magazine prices in the industry and the fastest production time, with just a 5 business day turnaround (plus shipping time).</h4>
-          : null}
+        {this.props.type === 'pricing' ? (
+          <h4 style={{ marginTop: 30, color: '#777' }}>
+            SPC has the lowest magazine prices in the industry and the fastest
+            production time, with just a 5 business day turnaround (plus
+            shipping time).
+          </h4>
+        ) : null}
         <HorizontalInputForm
           title="Publication Information"
           changed={this.handleInputChange}
           fields={this.state.publicationFields}
           stateData="pubInfo"
+          header="The options below are based on standard orders. If you are looking for a different paper stock, special size, or any other custom option please call our office to speak with us directly."
         />
         <HorizontalInputForm
           title="Pricing"

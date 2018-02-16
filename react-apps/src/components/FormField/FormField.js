@@ -17,18 +17,31 @@ class FormField extends Component {
     error: false,
   };
 
-  buildHelpPopover = (labelText) => {
+  buildHelpPopover = labelText => {
+    let popoverCharCount = 0;
     const popoverBody = this.props.help.map((helpItem, index) => {
+      // we keep track of the amount of help text for each popover incase we need to adjust the styling
+      popoverCharCount =
+        popoverCharCount + helpItem.title.length + helpItem.text.length;
+        
       return (
         <Aux key={index}>
-          <strong>{helpItem.title}</strong> {helpItem.text}
+          <strong>{helpItem.title}</strong> {helpItem.text} <br />
           {this.props.help.length !== index + 1 ? <br /> : null}
         </Aux>
       );
     });
 
+    const popStyle = {
+      maxWidth: 550,
+    };
+
     const popoverHover = (
-      <Popover id="popover-trigger-hover" title={labelText}>
+      <Popover
+        id="popover-trigger-hover"
+        title={labelText}
+        style={popoverCharCount > 300 ? popStyle : null}
+      >
         {popoverBody}
       </Popover>
     );
@@ -47,7 +60,7 @@ class FormField extends Component {
         {labelText} {helpIcon}
       </Aux>
     );
-  }
+  };
 
   render() {
     let control = null;
