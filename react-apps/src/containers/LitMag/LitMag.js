@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Button, Checkbox } from 'react-bootstrap';
-import HorizontalInputForm from '../HorizontalInputForm/HorizontalInputForm';
+import HorizontalFormSection from '../HorizontalFormSection/HorizontalFormSection';
 import _ from 'lodash';
 import { updateLitMagPrice } from '../../assets/js/new_prices';
 import classes from './LitMag.css';
@@ -195,9 +195,10 @@ class LitMag extends Component {
     }
   };
 
-  handleSubmit = () => {
-    
-  }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    alert('Your order has been submitted!');
+  };
 
   populateDropdownOptions = (stateKey, fieldId, min, max, step) => {
     let fields = [...this.state[stateKey]];
@@ -265,7 +266,7 @@ class LitMag extends Component {
     );
 
     const schoolInfoForm = (
-      <HorizontalInputForm
+      <HorizontalFormSection
         title="School Information"
         changed={this.handleInputChange}
         fields={schoolInfoFields}
@@ -274,7 +275,7 @@ class LitMag extends Component {
     );
 
     const fileUploadForm = (
-      <HorizontalInputForm
+      <HorizontalFormSection
         title="File Upload"
         changed={this.handleInputChange}
         fields={fileFields}
@@ -289,19 +290,13 @@ class LitMag extends Component {
     );
 
     const submitButton = (
-      <Form horizontal>
-        <FormGroup className="text-center">
-          <Button
-            bsSize="large"
-            bsStyle="primary"
-            onClick={this.handleSubmit}
-          >
-            {this.props.type === 'order-form'
-              ? 'Submit Order'
-              : 'Submit for Quote'}
-          </Button>
-        </FormGroup>
-      </Form>
+      <FormGroup className="text-center">
+        <Button bsSize="large" bsStyle="primary" type="submit">
+          {this.props.type === 'order-form'
+            ? 'Submit Order'
+            : 'Submit for Quote'}
+        </Button>
+      </FormGroup>
     );
 
     return (
@@ -314,36 +309,38 @@ class LitMag extends Component {
             shipping time).
           </h4>
         ) : null}
-        <HorizontalInputForm
-          title="Publication Information"
-          changed={this.handleInputChange}
-          fields={this.state.publicationFields}
-          stateData="pubInfo"
-          header="The options below are based on standard orders. If you are looking for a different paper stock, special size, or any other custom option please call our office to speak with us directly."
-        />
-        <HorizontalInputForm
-          title="Pricing"
-          changed={this.handleInputChange}
-          fields={priceFields}
-          stateData="price"
-          price={{
-            label: 'Total:',
-            value: this.state.price.total,
-          }}
-          footer={[
-            'Ground shipping is included in the price.',
-            <br key="break1" />,
-            'If you need expedited shipping, please contact our office for pricing.',
-          ]}
-        />
-        {this.props.type === 'pricing' ? priceQuoteToggle : null}
-        {this.props.type === 'order-form' || this.state.priceQuoteToggle
-          ? schoolInfoForm
-          : null}
-        {this.props.type === 'order-form' ? fileUploadForm : null}
-        {this.props.type === 'order-form' || this.state.priceQuoteToggle
-          ? submitButton
-          : null}
+        <Form horizontal onSubmit={this.handleSubmit}>
+          <HorizontalFormSection
+            title="Publication Information"
+            changed={this.handleInputChange}
+            fields={this.state.publicationFields}
+            stateData="pubInfo"
+            header="The options below are based on standard orders. If you are looking for a different paper stock, special size, or any other custom option please call our office to speak with us directly."
+          />
+          <HorizontalFormSection
+            title="Pricing"
+            changed={this.handleInputChange}
+            fields={priceFields}
+            stateData="price"
+            price={{
+              label: 'Total:',
+              value: this.state.price.total,
+            }}
+            footer={[
+              'Ground shipping is included in the price.',
+              <br key="break1" />,
+              'If you need expedited shipping, please contact our office for pricing.',
+            ]}
+          />
+          {this.props.type === 'pricing' ? priceQuoteToggle : null}
+          {this.props.type === 'order-form' || this.state.priceQuoteToggle
+            ? schoolInfoForm
+            : null}
+          {this.props.type === 'order-form' ? fileUploadForm : null}
+          {this.props.type === 'order-form' || this.state.priceQuoteToggle
+            ? submitButton
+            : null}
+        </Form>
       </div>
     );
   }

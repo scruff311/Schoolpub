@@ -1,11 +1,10 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
 import FormField from '../../components/FormField/FormField';
 import PriceDiv from '../../components/PriceDiv/PriceDiv';
 import Aux from '../../hoc/Aux';
-import classes from './HorizontalInputForm.css';
+import classes from './HorizontalFormSection.css';
 
-const horizontalInputForm = props => {
+const horizontalFormSection = props => {
   const formFields = props.fields.map((field, index) => {
     return (
       <FormField
@@ -61,12 +60,12 @@ const horizontalInputForm = props => {
     <Aux>
       <div className={classes.FormContainer}>
         <h3>{props.title}</h3>
-        <Form horizontal className={classes.FormBody}>
+        <div className={classes.FormBody}>
           {[header, formFields, price, footer]}
-        </Form>
+        </div>
       </div>
     </Aux>
   );
 };
 
-export default horizontalInputForm;
+export default horizontalFormSection;
