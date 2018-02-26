@@ -11,7 +11,7 @@ const radioAndCheckboxGroup = props => {
   return props.options.map((option, index) => {
     if (props.type === 'check') {
       return (
-        <Aux key={index}>
+        <Aux key={props.name + index}>
           <Checkbox
             name={props.name}
             value={option}
@@ -37,12 +37,13 @@ const radioAndCheckboxGroup = props => {
       }
 
       return (
-        <Aux key={index}>
+        <Aux key={props.name + index}>
           <Radio
             name={props.name}
             value={option}
             inline={props.inline}
-						onChange={event => props.changed(event, props.dataHandle)}
+            onChange={event => props.changed(event, props.dataHandle)}
+            checked={option === props.selectedOption}
 						style={style}
           >
             {child}

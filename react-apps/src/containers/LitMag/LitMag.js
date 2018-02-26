@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, FormGroup, Button, Checkbox } from 'react-bootstrap';
 import HorizontalInputForm from '../HorizontalInputForm/HorizontalInputForm';
 import _ from 'lodash';
+import { updateLitMagPrice } from '../../assets/js/new_prices';
 import classes from './LitMag.css';
 import {
   publicationFields,
@@ -27,8 +28,9 @@ class LitMag extends Component {
       name: '',
       dimensions: '',
       customDimensions: '', //if dimensions = 'Other', we use this field
-      insidePages: 12,
-      colorPages: 0,
+      copies: '',
+      insidePages: '',
+      colorPages: '',
       pagesToColor: '',
       paperStock: '',
       coverStyle: '',
@@ -37,7 +39,7 @@ class LitMag extends Component {
     },
     price: {
       promo: '',
-      total: 1000.33333,
+      total: 0,
     },
     schoolInfo: {
       name: '',
@@ -60,6 +62,7 @@ class LitMag extends Component {
 
   componentDidMount() {
     console.log('componentDidMount');
+    this.populateDropdownOptions('publicationFields', 'copies', 25, 1000, 25);
     this.populateDropdownOptions(
       'publicationFields',
       'insidePages',
@@ -68,9 +71,52 @@ class LitMag extends Component {
       4,
     );
     this.populateDropdownOptions('publicationFields', 'colorPages', 0, 12, 1);
+    // set initial defaults on page load
+    let pubState = { ...this.state.pubInfo };
+    pubState = {
+      ...pubState,
+      dimensions: '8.5 x 11',
+      copies: '25',
+      insidePages: '12',
+      colorPages: '0',
+      paperStock: 'Offset',
+      coverStyle: 'Self-Cover',
+      binding: 'Saddle Stitched',
+    };
+    this.setState({
+      pubInfo: pubState,
+    });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    // udpate the price total using the new pubInfo or promo code
+    if (
+      prevState.pubInfo !== this.state.pubInfo ||
+      prevState.price.promo !== this.state.price.promo
+    ) {
+      const updatedPrice = updateLitMagPrice(
+        this.state.pubInfo,
+        this.state.price,
+      );
+      // when these fields change we update the price. doing this here prevents an infinite loop
+      let price = { ...this.state.price };
+      price.total = updatedPrice;
+      this.setState({
+        price,
+      });
+    }
+  }
+
+  getFieldData = (fields, fieldId) => {
+    // find the field object with the given id
+    let fieldData = fields.find(element => {
+      return element.id === fieldId;
+    });
+    return fieldData;
+  };
+
   handleInputChange = (event, stateParamName) => {
+    /* first we set the new state data that will be used for the order */
     let stateParam = { ...this.state[stateParamName] };
     const target = event.target;
     const identifier =
@@ -90,6 +136,12 @@ class LitMag extends Component {
     this.setState({
       [stateParamName]: stateParam,
     });
+
+    /* now we update the form props if needed so they render correctly */
+    // when a radio button is changed, we need to change the selectedOption prop
+    if (target.type === 'radio') {
+      this.handleRadioChange('publicationFields', identifier, target.value);
+    }
 
     // when we change the number of pages, we need to update the # color pages dropdown
     if (identifier === 'insidePages') {
@@ -133,31 +185,33 @@ class LitMag extends Component {
     return null;
   };
 
-  populateDropdownOptions = (fieldsKey, fieldId, min, max, step) => {
-    // find the field object with the given id
-    let fields = [...this.state[fieldsKey]];
-    let fieldData = fields.find(element => {
-      return element.id === fieldId;
-    });
+  handleRadioChange = (stateKey, fieldId, selectedOption) => {
+    let fields = [...this.state[stateKey]];
+    let fieldData = this.getFieldData(fields, fieldId);
+    // if we found the object, assign the selected option prop
+    if (fieldData) {
+      fieldData.selectedOption = selectedOption;
+      this.updateFormField(stateKey, fields, fieldData);
+    }
+  };
+
+  handleSubmit = () => {
+    
+  }
+
+  populateDropdownOptions = (stateKey, fieldId, min, max, step) => {
+    let fields = [...this.state[stateKey]];
+    let fieldData = this.getFieldData(fields, fieldId);
     // if we found the object, create the array and apply it
     if (fieldData) {
       // create the array, starting with min, going to max by the specified step
       fieldData.options = _.range(min, max + step, step);
-      const fieldIndex = fields.indexOf(fieldData);
-      fields[fieldIndex] = fieldData;
-      this.setState({
-        [fieldsKey]: fields,
-      });
+      this.updateFormField(stateKey, fields, fieldData);
     }
   };
 
-  toggleDependentField = (
-    fieldsKey,
-    parentFieldId,
-    childField,
-    parentValue,
-  ) => {
-    let fields = [...this.state[fieldsKey]];
+  toggleDependentField = (stateKey, parentFieldId, childField, parentValue) => {
+    let fields = [...this.state[stateKey]];
     let childIndex = fields.findIndex(element => {
       return element.id === childField.id;
     });
@@ -178,7 +232,15 @@ class LitMag extends Component {
       fields.splice(childIndex, 1);
     }
     this.setState({
-      [fieldsKey]: fields,
+      [stateKey]: fields,
+    });
+  };
+
+  updateFormField = (stateKey, fields, fieldData) => {
+    const fieldIndex = fields.indexOf(fieldData);
+    fields[fieldIndex] = fieldData;
+    this.setState({
+      [stateKey]: fields,
     });
   };
 
@@ -232,7 +294,7 @@ class LitMag extends Component {
           <Button
             bsSize="large"
             bsStyle="primary"
-            onClick={this.populateDropdownOptions}
+            onClick={this.handleSubmit}
           >
             {this.props.type === 'order-form'
               ? 'Submit Order'

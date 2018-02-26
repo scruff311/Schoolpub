@@ -100,6 +100,10 @@ function calcHardCover(copies) {
     
 }
 
+export function update_lit_mag_price(state) {
+    console.log('update_lit_mag_price');
+}
+
 function update_price(sender) {
     
 //    var shipping = 0;

@@ -5,7 +5,7 @@ export const publicationFields = [
     type: 'text',
     options: null,
     width: 9,
-    error: 'Please provide a publication name.',
+    errorMsg: 'Please provide a publication name.',
     inline: null,
   },
   {
@@ -14,10 +14,20 @@ export const publicationFields = [
     placeholder: 'Example: 5 x 10',
     type: 'radio',
     options: ['7 x 10', '8 x 8', '8.5 x 11', '5.5 x 8.5', '5 x 8', 'Other'],
+    selectedOption: '8.5 x 11',
     customFieldId: 'customDimensions',
     width: 9,
-    error: 'Please choose the dimensions for your magazine.',
+    errorMsg: 'Please choose the dimensions for your magazine.',
     inline: false,
+  },
+  {
+    id: 'copies',
+    label: 'Number of Copies',
+    type: 'select',
+    options: [], //filled in LitMag.js
+    width: 2,
+    errorMsg: 'Please choose the number of magazines you would like.',
+    inline: null,
   },
   {
     id: 'insidePages',
@@ -25,7 +35,7 @@ export const publicationFields = [
     type: 'select',
     options: [], //filled in LitMag.js
     width: 2,
-    error: 'Please choose the number of pages inside the magazine.',
+    errorMsg: 'Please choose the number of pages inside the magazine.',
     inline: null,
   },
   {
@@ -34,7 +44,7 @@ export const publicationFields = [
     type: 'select',
     options: [0], //filled in LitMag.js
     width: 2,
-    error: null,
+    errorMsg: null,
     inline: null,
   },
   {
@@ -42,8 +52,9 @@ export const publicationFields = [
     label: 'Paper Stock',
     type: 'radio',
     options: ['Offset', 'Coated'],
+    selectedOption: 'Offset',
     width: 9,
-    error: 'Please choose a paper stock.',
+    errorMsg: 'Please choose a paper stock.',
     help: [
       {
         title: 'Offset:',
@@ -61,8 +72,9 @@ export const publicationFields = [
     label: 'Cover Style',
     type: 'radio',
     options: ['Self-Cover', 'Soft-Cover'],
+    selectedOption: 'Self-Cover',
     width: 9,
-    error: 'Please choose a cover style.',
+    errorMsg: 'Please choose a cover style.',
     help: [
       {
         title: 'Self-Cover:',
@@ -81,16 +93,17 @@ export const publicationFields = [
     type: 'check',
     options: ['Front Cover', 'Back Cover', 'Inside Front Cover', 'Inside Back Cover'],
     width: 4,
-    error: 'Please choose a which cover printing options you would like.',
+    errorMsg: 'Please choose a which cover printing options you would like.',
     inline: false,
   },
   {
     id: 'binding',
     label: 'Binding',
     type: 'radio',
-    options: ['Saddle Stiched', 'Square Back', 'Perfect Bound'],
+    options: ['Saddle Stitched', 'Square Back', 'Perfect Bound'],
+    selectedOption: 'Saddle Stitched',
     width: 9,
-    error: 'Please choose a binding.',
+    errorMsg: 'Please choose a binding.',
     help: [
       {
         title: 'Saddle Stitched:',
@@ -116,7 +129,8 @@ export const priceFields = [
     type: 'text',
     options: null,
     width: 4,
-    error: null,
+    errorMsg: 'Sorry, the promo code you entered is invalid.',
+    successMsg: 'The promo code %CODE% was successfully applied!',
     help: [
       {
         title: 'Early Bird Pricing:',
@@ -134,7 +148,7 @@ export const schoolInfoFields = [
     type: 'text',
     options: null,
     width: 9,
-    error: 'Please provide a school name.',
+    errorMsg: 'Please provide a school name.',
     inline: null,
   },
   {
@@ -143,7 +157,7 @@ export const schoolInfoFields = [
     type: 'text',
     options: null,
     width: 9,
-    error: 'Please provide an advisor name.',
+    errorMsg: 'Please provide an advisor name.',
     inline: null,
   },
   {
@@ -152,7 +166,7 @@ export const schoolInfoFields = [
     type: 'text',
     options: null,
     width: 9,
-    error: 'Please provide a street address.',
+    errorMsg: 'Please provide a street address.',
     inline: null,
   },
   {
@@ -161,7 +175,7 @@ export const schoolInfoFields = [
     type: 'text',
     options: null,
     width: 9,
-    error: 'Please provide a city or town.',
+    errorMsg: 'Please provide a city or town.',
     inline: null,
   },
   {
@@ -222,7 +236,7 @@ export const schoolInfoFields = [
       'WY',
     ],
     width: 2,
-    error: 'Please provide a state.',
+    errorMsg: 'Please provide a state.',
     inline: null,
   },
   {
@@ -231,7 +245,7 @@ export const schoolInfoFields = [
     type: 'text',
     options: null,
     width: 2,
-    error: 'Please provide a zip code.',
+    errorMsg: 'Please provide a zip code.',
     inline: null,
   },
   {
@@ -240,7 +254,7 @@ export const schoolInfoFields = [
     type: 'text',
     options: null,
     width: 3,
-    error: 'Please provide a contact phone number.',
+    errorMsg: 'Please provide a contact phone number.',
     inline: null,
   },
   {
@@ -249,7 +263,7 @@ export const schoolInfoFields = [
     type: 'text',
     options: null,
     width: 9,
-    error: 'Please provide a contact email.',
+    errorMsg: 'Please provide a contact email.',
     inline: null,
   },
 ];
@@ -261,7 +275,7 @@ export const fileFields = [
     type: 'file',
     options: null,
     width: 3,
-    error: 'A design file is required for submitting an order.',
+    errorMsg: 'A design file is required for submitting an order.',
     inline: null,
   },
   {
@@ -270,7 +284,7 @@ export const fileFields = [
     type: 'file',
     options: null,
     width: 3,
-    error: null,
+    errorMsg: null,
     inline: null,
   },
   {
@@ -279,7 +293,7 @@ export const fileFields = [
     type: 'file',
     options: null,
     width: 3,
-    error: null,
+    errorMsg: null,
     inline: null,
   },
 ];

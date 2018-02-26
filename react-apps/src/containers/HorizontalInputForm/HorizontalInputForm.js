@@ -9,18 +9,19 @@ const horizontalInputForm = props => {
   const formFields = props.fields.map((field, index) => {
     return (
       <FormField
-        key={index}
+        key={field.id}
         id={field.id}
         labelText={field.label}
         placeholder={field.placeholder}
         type={field.type}
         dataHandle={props.stateData}
         options={field.options}
+        selectedOption={field.selectedOption}
         width={field.width}
         inline={field.inline}
         changed={props.changed}
         customFieldId={field.customFieldId}
-        errorMsg={field.error}
+        errorMsg={field.errorMsg}
         help={field.help}
       />
     );

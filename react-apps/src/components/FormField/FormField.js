@@ -92,6 +92,7 @@ class FormField extends Component {
           customFieldId={this.props.customFieldId}
           dataHandle={this.props.dataHandle}
           options={this.props.options}
+          selectedOption={this.props.selectedOption}
           inline={this.props.inline}
         />
       );

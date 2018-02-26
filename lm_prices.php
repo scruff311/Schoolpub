@@ -4,7 +4,7 @@
         <title>Literary Magazines</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="includes/spcstyle.css">
-        <script language="javascript" src="includes/new_prices.js"></script>
+        <script language="javascript" src="react-apps/src/assets/js/new_prices.js"></script>
         <script language="javascript" src="includes/js/jquery-1.8.1.min.js"></script>
         <script type="text/javascript">
             
@@ -51,7 +51,7 @@
                         if (type == "Hemingway") {
                             document.getElementById("color_tag").innerHTML = "Full Color:";
                             document.getElementById("color_cell").innerHTML =
-                                "<select id='color' onchange='update_price(&quot;color&quot;)'>\n\
+                                "<select id='color' onchange='updatePrice(&quot;color&quot;)'>\n\
                                             <option value='0'>No</option>\n\
                                             <option value='" + pages + "'>Yes</option>\n\
                                         </select>";
@@ -71,7 +71,7 @@
                             color_select.selectedIndex = color;
                         }
                         
-                        update_price();
+                        updatePrice();
                         
                     });
 
@@ -347,7 +347,7 @@ a:visited {
                         <tr>
                             <td>Type of Binding:</td>
                             <td class="right_cells">
-                                <select id="cover" onchange="update_price()">
+                                <select id="cover" onchange="updatePrice()">
                                     <option value="">Choose One</option>
                                     <option value="self">Self Cover</option>
                                     <option value="soft">Soft Cover</option>                                    
@@ -357,7 +357,7 @@ a:visited {
 <!--                        <tr>
                             <td>Paper Stock:</td>
                             <td class="right_cells">
-                                <select id="stock" onchange="update_price()">
+                                <select id="stock" onchange="updatePrice()">
                                     <option value="">Choose One</option>
                                     <option value="Glossy">Glossy</option>
                                     <option value="Offset">White Offset</option>
@@ -367,7 +367,7 @@ a:visited {
                         <tr>
                             <td>Number of Copies:</td>
                             <td class="right_cells">
-                                <select id="copies" onchange="update_price()">
+                                <select id="copies" onchange="updatePrice()">
                                     <option value="">Choose One</option>
                                     <?php copy_box(); ?>
                                 </select>
@@ -376,7 +376,7 @@ a:visited {
                         <tr>
                             <td>Number of Pages per Copy:</td>
                             <td class="right_cells">
-                                <select id="pages" onchange="update_price('pages')">
+                                <select id="pages" onchange="updatePrice('pages')">
                                     <option value="">Choose One</option>
                                     <?php page_box(); ?>
                                 </select>
@@ -385,7 +385,7 @@ a:visited {
                         <tr>
                             <td id="color_tag" class="bottom_cells">Number of Color Pages:</td>
                             <td id="color_cell" class="bottom_cells right_cells">
-                                <select id="color" onchange="update_price('color')">
+                                <select id="color" onchange="updatePrice('color')">
                                     <option value="0">0</option>
                                 </select>
                             </td>
