@@ -18,8 +18,17 @@ const pagesToColor = {
   type: 'text',
   options: null,
   width: 4,
-  error: 'Please indicate which pages you would like to be in color.',
+  required: true,
+  error: false,
+  errorMsg: 'Please indicate which pages you would like to be in color.',
   inline: null,
+};
+
+const formToStateMap = {
+  publicationFields: 'pubInfo',
+  priceFields: 'price',
+  schoolInfoFields: 'schoolInfo',
+  fileFields: 'files',
 };
 
 class LitMag extends Component {
@@ -57,6 +66,9 @@ class LitMag extends Component {
       file3: null,
     },
     publicationFields: publicationFields,
+    priceFields: priceFields,
+    schoolInfoFields: schoolInfoFields,
+    fileFields: fileFields,
     priceQuoteToggle: false,
   };
 
@@ -71,6 +83,7 @@ class LitMag extends Component {
       4,
     );
     this.populateDropdownOptions('publicationFields', 'colorPages', 0, 12, 1);
+
     // set initial defaults on page load
     let pubState = { ...this.state.pubInfo };
     pubState = {
@@ -125,6 +138,10 @@ class LitMag extends Component {
         : target.id;
     // a checkbox could have an array of values, so we need to handle this separately
     if (target.type === 'checkbox') {
+      // let paramArray = stateParam[identifier];
+      // if (paramArray === null) {
+      //   paramArray = [];
+      // }
       stateParam[identifier] = this.handleCheckboxChange(
         target,
         stateParam[identifier],
@@ -186,28 +203,46 @@ class LitMag extends Component {
   };
 
   handleRadioChange = (stateKey, fieldId, selectedOption) => {
-    let fields = [...this.state[stateKey]];
-    let fieldData = this.getFieldData(fields, fieldId);
+    let formSection = [...this.state[stateKey]];
+    let fieldData = this.getFieldData(formSection, fieldId);
     // if we found the object, assign the selected option prop
     if (fieldData) {
       fieldData.selectedOption = selectedOption;
-      this.updateFormField(stateKey, fields, fieldData);
+      this.updateFormField(stateKey, formSection, fieldData);
     }
   };
 
-  handleSubmit = (e) => {
+  handleSubmitOrder = e => {
     e.preventDefault();
-    alert('Your order has been submitted!');
+    let isFormInvalid = Object.keys(formToStateMap).some(key => {
+      let formSection = this.state[key];
+      let stateParam = this.state[formToStateMap[key]];
+      return !this.validateForm(key, formSection, stateParam);
+    });
+
+    if (isFormInvalid) {
+      alert('Please correct the form errors.');
+    } else {
+      alert('Your order has been submitted!');
+    }
+  };
+
+  isFieldEmpty = field => {
+    return (
+      field === '' ||
+      field === null ||
+      (Array.isArray(field) && field.length === 0)
+    );
   };
 
   populateDropdownOptions = (stateKey, fieldId, min, max, step) => {
-    let fields = [...this.state[stateKey]];
-    let fieldData = this.getFieldData(fields, fieldId);
+    let formSection = [...this.state[stateKey]];
+    let fieldData = this.getFieldData(formSection, fieldId);
     // if we found the object, create the array and apply it
     if (fieldData) {
       // create the array, starting with min, going to max by the specified step
       fieldData.options = _.range(min, max + step, step);
-      this.updateFormField(stateKey, fields, fieldData);
+      this.updateFormField(stateKey, formSection, fieldData);
     }
   };
 
@@ -237,12 +272,39 @@ class LitMag extends Component {
     });
   };
 
-  updateFormField = (stateKey, fields, fieldData) => {
-    const fieldIndex = fields.indexOf(fieldData);
-    fields[fieldIndex] = fieldData;
+  updateFormField = (stateKey, formSection, fieldData) => {
+    const fieldIndex = formSection.indexOf(fieldData);
+    formSection[fieldIndex] = fieldData;
     this.setState({
-      [stateKey]: fields,
+      [stateKey]: formSection,
     });
+  };
+
+  validateForm = (stateKey, formSection, stateParam) => {
+    // go through each field. if it is required and the corresponding state is empty, return false (invalid)
+    let invalidForm = formSection.some(field => {
+      if (field.required && this.isFieldEmpty(stateParam[field.id])) {
+        field.error = true;
+      } else if (
+        field.required &&
+        field.id === 'email' &&
+        !stateParam[field.id].match(/\S+@\S+\.\S+/)
+      ) {
+        field.error = true;
+      } else if (
+        field.required &&
+        field.id === 'zip' &&
+        !stateParam[field.id].match(/^[0-9]{5}(?:-[0-9]{4})?$/)
+      ) {
+        field.error = true;
+      } 
+      else {
+        field.error = false;
+      }
+      this.updateFormField(stateKey, formSection, field);
+      return field.error;
+    });
+    return !invalidForm;
   };
 
   render() {
@@ -269,7 +331,7 @@ class LitMag extends Component {
       <HorizontalFormSection
         title="School Information"
         changed={this.handleInputChange}
-        fields={schoolInfoFields}
+        fields={this.state.schoolInfoFields}
         stateData="schoolInfo"
       />
     );
@@ -278,7 +340,7 @@ class LitMag extends Component {
       <HorizontalFormSection
         title="File Upload"
         changed={this.handleInputChange}
-        fields={fileFields}
+        fields={this.state.fileFields}
         stateData="files"
         header="You may wish to compress your files to save transmission time. Files may be compressed as .zip or .sit files. PC users can use WinZip to create .zip files; Mac users should use Stuffit to create either .sit files or .zip (preferred) archives to prevent file corruption."
         footer={[
@@ -309,7 +371,7 @@ class LitMag extends Component {
             shipping time).
           </h4>
         ) : null}
-        <Form horizontal onSubmit={this.handleSubmit}>
+        <Form horizontal onSubmit={this.handleSubmitOrder}>
           <HorizontalFormSection
             title="Publication Information"
             changed={this.handleInputChange}
@@ -320,7 +382,7 @@ class LitMag extends Component {
           <HorizontalFormSection
             title="Pricing"
             changed={this.handleInputChange}
-            fields={priceFields}
+            fields={this.state.priceFields}
             stateData="price"
             price={{
               label: 'Total:',

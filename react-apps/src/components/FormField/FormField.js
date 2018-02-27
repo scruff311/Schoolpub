@@ -13,10 +13,6 @@ import DropdownInput from './DropdownInput';
 import RadioAndCheckboxGroup from './RadioAndCheckboxGroup';
 
 class FormField extends Component {
-  state = {
-    error: false,
-  };
-
   buildHelpPopover = labelText => {
     let popoverCharCount = 0;
     const popoverBody = this.props.help.map((helpItem, index) => {
@@ -64,16 +60,7 @@ class FormField extends Component {
 
   render() {
     let control = null;
-    if (this.props.type === 'text' || this.props.type === 'file') {
-      control = (
-        <TextAndFileInput
-          type={this.props.type}
-          placeholder={this.props.placeholder}
-          changed={this.props.changed}
-          dataHandle={this.props.dataHandle}
-        />
-      );
-    } else if (this.props.type === 'select') {
+    if (this.props.type === 'select') {
       control = (
         <DropdownInput
           placeholder={this.props.placeholder}
@@ -97,9 +84,19 @@ class FormField extends Component {
         />
       );
     }
+    else {
+      control = (
+        <TextAndFileInput
+          type={this.props.type}
+          placeholder={this.props.placeholder}
+          changed={this.props.changed}
+          dataHandle={this.props.dataHandle}
+        />
+      );
+    }
 
     let errorAlert = null;
-    if (this.state.error && this.props.errorMsg) {
+    if (this.props.error && this.props.errorMsg) {
       errorAlert = (
         <Col smOffset={3}>
           <Alert bsStyle="danger">{this.props.errorMsg}</Alert>

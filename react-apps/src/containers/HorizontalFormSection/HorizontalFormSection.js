@@ -20,6 +20,7 @@ const horizontalFormSection = props => {
         inline={field.inline}
         changed={props.changed}
         customFieldId={field.customFieldId}
+        error={field.error}
         errorMsg={field.errorMsg}
         help={field.help}
       />
