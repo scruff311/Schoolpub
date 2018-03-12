@@ -24,6 +24,7 @@ const pagesToColor = {
   inline: null,
 };
 
+// this is a simple mapping of which state params correspond to which fields
 const formToStateMap = {
   publicationFields: 'pubInfo',
   priceFields: 'price',
@@ -40,7 +41,7 @@ class LitMag extends Component {
       copies: '',
       insidePages: '',
       colorPages: '',
-      pagesToColor: '',
+      pagesToColor: 'None',
       paperStock: '',
       coverStyle: '',
       coverPrinting: [],
@@ -223,7 +224,36 @@ class LitMag extends Component {
     if (isFormInvalid) {
       alert('Please correct the form errors.');
     } else {
-      alert('Your order has been submitted!');
+      // const { files } = this.state;
+      // send state data to submit script
+      let data = new FormData();
+      // for (const fileKey in files) {
+      //   data.append(fileKey, files[fileKey]);
+      // }
+      for (const formKey in formToStateMap) {
+        const stateKey = formToStateMap[formKey];
+        const stateData = this.state[stateKey];
+        for (const subKey in stateData) {
+          const postKey = stateKey + '_' + subKey;
+          data.append(postKey, stateData[subKey]);
+        }
+      }
+
+      let header = new Headers({
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'multipart/form-data'
+      });
+
+      fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
+        method: 'POST',
+        mode: 'cors',
+        header: header,
+        body: data,
+      }).then(res => {
+        console.log('response: ' + res.body);
+        // return res;
+      }).catch(err => err);
+      // alert('Your order has been submitted!');
     }
   };
 

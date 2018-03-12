@@ -1,11 +1,10 @@
 <? 
 $Subject = "SPC Newspaper Upload";
 $Email = "SPC_Uploads@schoolpub.com";
-$SendToRecipient1 = "newspapers@schoolpub.com";
+$SendToRecipient1 = "orders@seniopub.com";
 
 if($_POST){
-//	$target_file_path = dirname(__FILE__) . "\uploads\\";
-	$target_file_path = dirname(__FILE__) . "\Test\\";
+	$target_file_path = dirname(__FILE__) . "/uploads/";
 	if (!is_dir($target_file_path)) mkdir($target_file_path, 0777, true);
 	
 	// GET FILE NAMES
@@ -25,6 +24,8 @@ if($_POST){
 	if($_FILES['FILE1']['name']) $file_uploads2 .= $final_filename1 . "\n";
 	if($_FILES['FILE2']['name']) $file_uploads2 .= $final_filename2 . "\n";
 	if($_FILES['FILE3']['name']) $file_uploads2 .= $final_filename3 . "\n";
+
+	// echo $target_file_path . $final_filename1;
 
 	if($_FILES['FILE1']['tmp_name']) move_uploaded_file($_FILES['FILE1']['tmp_name'], $target_file_path . $final_filename1);
 	if($_FILES['FILE2']['tmp_name']) move_uploaded_file($_FILES['FILE2']['tmp_name'], $target_file_path . $final_filename2);
