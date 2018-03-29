@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Button, Checkbox, Alert } from 'react-bootstrap';
+import { Form, FormGroup, Button, Checkbox, Alert, Label } from 'react-bootstrap';
 import HorizontalFormSection from '../HorizontalFormSection/HorizontalFormSection';
 import _ from 'lodash';
+import { Dots } from 'react-activity';
 import { updateLitMagPrice } from '../../assets/js/new_prices';
 import classes from './LitMag.css';
 import {
@@ -72,6 +73,8 @@ class LitMag extends Component {
     fileFields: fileFields,
     priceQuoteToggle: false,
     submitStatus: null,
+    submitDisabled: false,
+    isSubmittingForm: false,
   };
 
   componentDidMount() {
@@ -225,6 +228,10 @@ class LitMag extends Component {
     if (isFormInvalid) {
       alert('Please correct the form errors.');
     } else {
+      this.setState({
+        submitDisabled: true,
+        isSubmittingForm: true,
+      })
       this.postFormToServer();
     }
   };
@@ -250,10 +257,17 @@ class LitMag extends Component {
         console.log('Request successful: ', data.response);
         this.setState({
           submitStatus: data.response === 1 ? true : false,
-        })
+          submitDisabled: data.response === 1 ? true : false,
+          isSubmittingForm: false,
+        });
       })
       .catch(err => {
         console.log('fetch error: ', err);
+        this.setState({
+          submitStatus: false,
+          submitDisabled: false,
+          isSubmittingForm: false,
+        });
       });
   }
 
@@ -312,7 +326,7 @@ class LitMag extends Component {
         'Oops! A problem has occured. Please call our office for assistance.';
     }
 
-    return <Alert bsStyle={type}>{message}</Alert>;
+    return <Alert className={classes.SubmitAlert} bsStyle={type}>{message}</Alert>;
   };
 
   toggleDependentField = (stateKey, parentFieldId, childField, parentValue) => {
@@ -423,11 +437,12 @@ class LitMag extends Component {
       <FormGroup className="text-center">
         <div className={classes.SubmitDiv}>
           {this.getSubmitAlert()}
-          <Button bsSize="large" bsStyle="primary" type="submit">
+          <Button disabled={this.state.submitDisabled} bsSize="large" bsStyle="primary" type="submit">
             {this.props.type === 'order-form'
               ? 'Submit Order'
               : 'Submit for Quote'}
           </Button>
+          {this.state.isSubmittingForm && <h4><Label style={{marginTop: 10}} bsStyle="info">Please Wait...</Label></h4>}
         </div>
       </FormGroup>
     );
