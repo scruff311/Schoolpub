@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Button, Checkbox } from 'react-bootstrap';
+import { Form, FormGroup, Button, Checkbox, Alert } from 'react-bootstrap';
 import HorizontalFormSection from '../HorizontalFormSection/HorizontalFormSection';
 import _ from 'lodash';
 import { updateLitMagPrice } from '../../assets/js/new_prices';
@@ -71,6 +71,7 @@ class LitMag extends Component {
     schoolInfoFields: schoolInfoFields,
     fileFields: fileFields,
     priceQuoteToggle: false,
+    submitStatus: null,
   };
 
   componentDidMount() {
@@ -224,37 +225,55 @@ class LitMag extends Component {
     if (isFormInvalid) {
       alert('Please correct the form errors.');
     } else {
-      // const { files } = this.state;
-      // send state data to submit script
-      let data = new FormData();
-      // for (const fileKey in files) {
-      //   data.append(fileKey, files[fileKey]);
-      // }
-      for (const formKey in formToStateMap) {
-        const stateKey = formToStateMap[formKey];
-        const stateData = this.state[stateKey];
-        for (const subKey in stateData) {
-          const postKey = stateKey + '_' + subKey;
-          data.append(postKey, stateData[subKey]);
-        }
-      }
-
-      let header = new Headers({
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'multipart/form-data'
-      });
-
-      fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
-        method: 'POST',
-        mode: 'cors',
-        header: header,
-        body: data,
-      }).then(res => {
-        console.log('response: ' + res.body);
-        // return res;
-      }).catch(err => err);
-      // alert('Your order has been submitted!');
+      this.postFormToServer();
     }
+  };
+
+  postFormToServer = () => {
+    const data = this.parseStateIntoJson();
+    let header = new Headers({
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'multipart/form-data',
+    });
+
+    // fetch('http://www.schoolpub.com/lit-mag-submit.php', {
+    fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
+      method: 'POST',
+      mode: 'cors',
+      header: header,
+      body: data,
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        console.log('Request successful: ', data.response);
+        this.setState({
+          submitStatus: data.response === 1 ? true : false,
+        })
+      })
+      .catch(err => {
+        console.log('fetch error: ', err);
+      });
+  }
+
+  parseStateIntoJson = () => {
+    // const { files } = this.state;
+    // send state data to submit script
+    let data = new FormData();
+    // for (const fileKey in files) {
+    //   data.append(fileKey, files[fileKey]);
+    // }
+    for (const formKey in formToStateMap) {
+      const stateKey = formToStateMap[formKey];
+      const stateData = this.state[stateKey];
+      for (const subKey in stateData) {
+        const postKey = stateKey + '_' + subKey;
+        data.append(postKey, stateData[subKey]);
+      }
+    }
+
+    return data;
   };
 
   isFieldEmpty = field => {
@@ -274,6 +293,26 @@ class LitMag extends Component {
       fieldData.options = _.range(min, max + step, step);
       this.updateFormField(stateKey, formSection, fieldData);
     }
+  };
+
+  getSubmitAlert = () => {
+    const { submitStatus } = this.state;
+    if (submitStatus == null) {
+      return null;
+    }
+
+    let type, message;
+    if (submitStatus === true) {
+      type = 'success';
+      message =
+        'Your order is submitted! Check your email for additional instructions.';
+    } else {
+      type = 'danger';
+      message =
+        'Oops! A problem has occured. Please call our office for assistance.';
+    }
+
+    return <Alert bsStyle={type}>{message}</Alert>;
   };
 
   toggleDependentField = (stateKey, parentFieldId, childField, parentValue) => {
@@ -327,8 +366,7 @@ class LitMag extends Component {
         !stateParam[field.id].match(/^[0-9]{5}(?:-[0-9]{4})?$/)
       ) {
         field.error = true;
-      } 
-      else {
+      } else {
         field.error = false;
       }
       this.updateFormField(stateKey, formSection, field);
@@ -383,11 +421,14 @@ class LitMag extends Component {
 
     const submitButton = (
       <FormGroup className="text-center">
-        <Button bsSize="large" bsStyle="primary" type="submit">
-          {this.props.type === 'order-form'
-            ? 'Submit Order'
-            : 'Submit for Quote'}
-        </Button>
+        <div className={classes.SubmitDiv}>
+          {this.getSubmitAlert()}
+          <Button bsSize="large" bsStyle="primary" type="submit">
+            {this.props.type === 'order-form'
+              ? 'Submit Order'
+              : 'Submit for Quote'}
+          </Button>
+        </div>
       </FormGroup>
     );
 

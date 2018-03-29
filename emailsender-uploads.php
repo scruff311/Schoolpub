@@ -1,10 +1,10 @@
 <?php
 if(isset($_POST['email'])) {
  
-    // EDIT THE 2 LINES BELOW AS REQUIRED
-    $email_to = "spc.schoolpub@gmail.com";
+  // EDIT THE 2 LINES BELOW AS REQUIRED
+  $email_to = "spc.schoolpub@gmail.com";
 	$email_from = "orders@schoolpub.com";
-    $email_subject = "OnLine NP Order";
+  $email_subject = "OnLine NP Order";
  
 //    function died($error) {
         // your error code can go here
