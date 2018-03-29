@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Button, Checkbox, Alert, Label } from 'react-bootstrap';
+import {
+  Form,
+  FormGroup,
+  Button,
+  Checkbox,
+  Alert,
+  Label,
+} from 'react-bootstrap';
 import HorizontalFormSection from '../HorizontalFormSection/HorizontalFormSection';
 import _ from 'lodash';
 import { Dots } from 'react-activity';
@@ -231,7 +238,7 @@ class LitMag extends Component {
       this.setState({
         submitDisabled: true,
         isSubmittingForm: true,
-      })
+      });
       this.postFormToServer();
     }
   };
@@ -269,7 +276,7 @@ class LitMag extends Component {
           isSubmittingForm: false,
         });
       });
-  }
+  };
 
   parseStateIntoJson = () => {
     // const { files } = this.state;
@@ -326,7 +333,11 @@ class LitMag extends Component {
         'Oops! A problem has occured. Please call our office for assistance.';
     }
 
-    return <Alert className={classes.SubmitAlert} bsStyle={type}>{message}</Alert>;
+    return (
+      <Alert className={classes.SubmitAlert} bsStyle={type}>
+        {message}
+      </Alert>
+    );
   };
 
   toggleDependentField = (stateKey, parentFieldId, childField, parentValue) => {
@@ -437,12 +448,23 @@ class LitMag extends Component {
       <FormGroup className="text-center">
         <div className={classes.SubmitDiv}>
           {this.getSubmitAlert()}
-          <Button disabled={this.state.submitDisabled} bsSize="large" bsStyle="primary" type="submit">
+          <Button
+            disabled={this.state.submitDisabled}
+            bsSize="large"
+            bsStyle="primary"
+            type="submit"
+          >
             {this.props.type === 'order-form'
               ? 'Submit Order'
               : 'Submit for Quote'}
           </Button>
-          {this.state.isSubmittingForm && <h4><Label style={{marginTop: 10}} bsStyle="info">Please Wait...</Label></h4>}
+          {this.state.isSubmittingForm && (
+            <h4>
+              <Label style={{ marginTop: 10 }} bsStyle="info">
+                Please Wait...
+              </Label>
+            </h4>
+          )}
         </div>
       </FormGroup>
     );
