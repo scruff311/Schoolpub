@@ -1,8 +1,13 @@
 <?php
+    ini_set('display_errors',1);
+    ini_set('display_startup_errors',1);
+    error_reporting(E_ALL);
+    ini_set("memory_limit", "-1");
+
 	date_default_timezone_set("America/New_York");
 
 	// switch between debug (local) and live server params
-    $debugging = 1;
+    $debugging = 0;
     
 	// Confirmation number
 	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), true)), 0, 7));
@@ -31,26 +36,41 @@ function saveFiles($confirm) {
 		$s = $file['size'];
 		$t = $file['tmp_name'];
 		if (!$n)
-				continue;
+			continue;
 
-		// $filename = $confirm . "_" . $n;
-		// $directory = "uploads";
-		$filename = $n;
-		$directory = "uploads/" . $confirm;
-		$file_path = $directory . "/" . $filename;
+        $filename = $confirm . "_" . $n;
+        
+        // $directory = $_SERVER['DOCUMENT_ROOT'] . "/uploads/";
+        $directory = dirname(__FILE__) . "/uploads/";
+        if (!is_dir($directory)) mkdir($directory, 0777, true);
 
-		// create a folder for this confirmation number if it doesn't exist
-		if (!is_dir($directory)) {
-			mkdir($directory, 0777, true);
-		}
+        if (is_writable($directory)) {
+            // do upload logic here
+        
+            // $filename = $n;
+            // $directory = "/uploads/" . $confirm;
+            // $file_path = $directory . "/" . $filename;
+            $file_path = $directory . $filename;
 
-		if (move_uploaded_file($t, $file_path)) {
-			$filenames[$i] = $filename;
-			$i++;
-		}
-		else {
-			// echo $filename . " upload FAILED!\n";
-		}
+            // create a folder for this confirmation number if it doesn't exist
+            // if (!is_dir($directory)) {
+            // 	mkdir($directory, 0777, true);
+            // }
+
+            if (move_uploaded_file($t, $file_path)) {
+                $filenames[$i] = $filename;
+                $i++;
+            }
+            else {
+                // echo $filename . " upload FAILED!\n";
+                // $error = error_get_last();
+                // echo 'Could not move file. ' . $error['message'] . PHP_EOL;
+            }
+        }
+        else {
+            // $error = error_get_last();
+            // echo 'Upload directory is not writable, or does not exist. ' . $error['message'] . PHP_EOL;
+        }
 	}
 
 	return $filenames;

@@ -98,7 +98,7 @@ export function updateLitMagPrice(pubInfo, price) {
   const paper = pubInfo.paperStock;
   const cover = pubInfo.coverStyle;
   const binding = pubInfo.binding;
-  const promo = price.promo;
+  const promoCode = price.promo;
 
   // calculate the globals using the old form format for cover, i.e. soft vs Soft-Cover
   const coverOldFormat = cover === 'Soft-Cover' ? 'soft' : 'self';
@@ -133,9 +133,9 @@ export function updateLitMagPrice(pubInfo, price) {
   printingCost += (binding === 'Perfect Bound') ? (perfectBound * copies) : 0;
 
   // apply the promo if applicable
-  printingCost *= applyPromo(promo);
+  const finalCost = applyPromo(printingCost, promoCode);
 
-  return printingCost;
+  return finalCost;
 }
 
 function updatePrice(sender) {
@@ -204,15 +204,15 @@ function updatePrice(sender) {
   }
 }
 
-function applyPromo(code) {
+function applyPromo(cost, code) {
   const today = new Date();
   const april15 = new Date('04/15/' + today.getFullYear());
 
   if (code.toLowerCase() === 'lm-early' && today < april15) {
-    return 0.9;
+    return {'total': 0.9 * cost, 'promo-applied': 'LM-Early'};
   }
 
-  return 1.0;
+  return {'total': cost, 'promo-applied': null};
 }
 
 // Rebuild color selection to be 0 - number of pages. Hemingway only gets No or Yes.

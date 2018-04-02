@@ -104,6 +104,15 @@ class FormField extends Component {
       );
     }
 
+    let successAlert = null;
+    if (this.props.success && this.props.successMsg) {
+      successAlert = (
+        <Col smOffset={3}>
+          <Alert bsStyle="success">{this.props.successMsg}</Alert>
+        </Col>
+      );
+    }
+
     let label = this.props.labelText;
     if (this.props.help) {
       label = this.buildHelpPopover(label);
@@ -118,6 +127,7 @@ class FormField extends Component {
           <Col sm={this.props.width}>{control}</Col>
         </FormGroup>
         {errorAlert}
+        {successAlert}
       </Aux>
     );
   }

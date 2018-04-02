@@ -13,10 +13,10 @@ import { Dots } from 'react-activity';
 import { updateLitMagPrice } from '../../assets/js/new_prices';
 import classes from './LitMag.css';
 import {
-  publicationFields,
-  priceFields,
-  schoolInfoFields,
-  fileFields,
+  defaultPublicationFields,
+  defaultPriceFields,
+  defaultSchoolInfoFields,
+  defaultFileFields,
 } from '../../data/LitMagFormFields';
 
 const pagesToColor = {
@@ -74,10 +74,10 @@ class LitMag extends Component {
       file2: null,
       file3: null,
     },
-    publicationFields: publicationFields,
-    priceFields: priceFields,
-    schoolInfoFields: schoolInfoFields,
-    fileFields: fileFields,
+    publicationFields: [...defaultPublicationFields],
+    priceFields: [...defaultPriceFields],
+    schoolInfoFields: [...defaultSchoolInfoFields],
+    fileFields: [...defaultFileFields],
     priceQuoteToggle: false,
     submitStatus: null,
     submitDisabled: false,
@@ -125,7 +125,8 @@ class LitMag extends Component {
       );
       // when these fields change we update the price. doing this here prevents an infinite loop
       let price = { ...this.state.price };
-      price.total = updatedPrice;
+      price.total = updatedPrice['total'];
+      this.updatePromoField(updatedPrice['promo-applied']);
       this.setState({
         price,
       });
@@ -250,8 +251,8 @@ class LitMag extends Component {
       'Content-Type': 'multipart/form-data',
     });
 
-    // fetch('http://www.schoolpub.com/lit-mag-submit.php', {
-    fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
+    fetch('http://www.schoolpub.com/lit-mag-submit.php', {
+    // fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
       method: 'POST',
       mode: 'cors',
       header: header,
@@ -366,6 +367,25 @@ class LitMag extends Component {
     });
   };
 
+  updatePromoField = (code) => {
+    let priceSection = [...this.state.priceFields];
+    let promoData = this.getFieldData(priceSection, 'promo');
+    if (code != null) {
+      promoData['success'] = true;
+      promoData['successMsg'] = promoData['successMsg'].replace('$code', code);
+    }
+    else {
+      promoData['success'] = false;
+      const defaultPromoSection = this.getFieldData(defaultPriceFields, 'promo');
+      const defaultSuccessMsg = defaultPromoSection['successMsg'];
+      promoData['successMsg'] = defaultSuccessMsg;
+      console.log('use default: ' + defaultSuccessMsg);
+    }
+
+    console.log(promoData['successMsg']);
+    this.updateFormField('priceFields', priceSection, promoData);
+  };
+
   updateFormField = (stateKey, formSection, fieldData) => {
     const fieldIndex = formSection.indexOf(fieldData);
     formSection[fieldIndex] = fieldData;
@@ -377,19 +397,19 @@ class LitMag extends Component {
   validateForm = (stateKey, formSection, stateParam) => {
     // go through each field. if it is required and the corresponding state is empty, return false (invalid)
     let invalidForm = formSection.some(field => {
-      if (field.required && this.isFieldEmpty(stateParam[field.id])) {
+      if (field.required && this.isFieldEmpty(stateParam[field.id])) { // is required field non-empty?
         field.error = true;
       } else if (
         field.required &&
         field.id === 'email' &&
         !stateParam[field.id].match(/\S+@\S+\.\S+/)
-      ) {
+      ) { // is email valid?
         field.error = true;
       } else if (
         field.required &&
         field.id === 'zip' &&
         !stateParam[field.id].match(/^[0-9]{5}(?:-[0-9]{4})?$/)
-      ) {
+      ) { // is zipcode in right format?
         field.error = true;
       } else {
         field.error = false;

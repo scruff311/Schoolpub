@@ -22,6 +22,8 @@ const horizontalFormSection = props => {
         customFieldId={field.customFieldId}
         error={field.error}
         errorMsg={field.errorMsg}
+        success={field.success}
+        successMsg={field.successMsg}
         help={field.help}
       />
     );

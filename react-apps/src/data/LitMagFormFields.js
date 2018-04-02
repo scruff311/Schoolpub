@@ -1,4 +1,4 @@
-export const publicationFields = [
+export const defaultPublicationFields = [
   {
     id: 'name',
     label: 'Publication Name',
@@ -140,7 +140,7 @@ export const publicationFields = [
   },
 ];
 
-export const priceFields = [
+export const defaultPriceFields = [
   {
     id: 'promo',
     label: 'Promo Code',
@@ -151,7 +151,7 @@ export const priceFields = [
     error: false,
     errorMsg: 'Sorry, the promo code you entered is invalid.',
     success: false,
-    successMsg: 'The promo code %CODE% was successfully applied!',
+    successMsg: 'The promo code $code was successfully applied!',
     help: [
       {
         title: 'Early Bird Pricing:',
@@ -162,7 +162,7 @@ export const priceFields = [
   },
 ];
 
-export const schoolInfoFields = [
+export const defaultSchoolInfoFields = [
   {
     id: 'name',
     label: 'School Name',
@@ -305,7 +305,7 @@ export const schoolInfoFields = [
   },
 ];
 
-export const fileFields = [
+export const defaultFileFields = [
   {
     id: 'file1',
     label: 'File 1',
