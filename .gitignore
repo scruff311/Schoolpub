@@ -13,3 +13,12 @@ react-apps/*
 !react-apps/public/
 !react-apps/scripts/
 !react-apps/src/
+
+# We need the css for react-activity module
+!react-apps/node_modules/
+react-apps/node_modules/*
+!react-apps/node_modules/react-activity/
+react-apps/node_modules/react-activity/*
+!react-apps/node_modules/react-activity/dist/
+react-apps/node_modules/react-activity/dist/*
+!react-apps/node_modules/react-activity/dist/react-activity.css
