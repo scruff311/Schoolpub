@@ -59,7 +59,7 @@ export const defaultPublicationFields = [
   },
   {
     id: 'paperStock',
-    label: 'Paper Stock',
+    label: 'Inside Paper Stock',
     type: 'radio',
     options: ['Offset', 'Coated'],
     selectedOption: 'Offset',
@@ -70,47 +70,36 @@ export const defaultPublicationFields = [
     help: [
       {
         title: 'Offset:',
-        text: 'This is a 60lb uncoated or matte finish paper similar to the paper in your personal printer.'
+        text: 'This is a 60lb uncoated or matte finish paper similar to the paper in your personal printer. Best suited for art and prose. (Recommended)'
       },
       {
         title: 'Coated:',
-        text: 'This is a 80lb glossy finish paper similar to that of a traditional magazine.'
+        text: 'This is a 100lb glossy finish paper similar to that in your yearbook. Best suited for photos.'
       },
     ],
     inline: true,
   },
   {
     id: 'coverStyle',
-    label: 'Cover Style',
+    label: 'Cover Choice',
     type: 'radio',
-    options: ['Self-Cover', 'Soft-Cover'],
-    selectedOption: 'Self-Cover',
+    options: ['Self Cover (no cover)', 'Soft Cover (thicker cover)'],
+    selectedOption: 'Self Cover (no cover)',
     width: 9,
     required: true,
     error: false,
     errorMsg: 'Please choose a cover style.',
     help: [
       {
-        title: 'Self-Cover:',
-        text: 'The thickness of the cover paper will be the same as the inside pages.'
+        title: 'Self Cover:',
+        text: 'The cover paper is the same as the inside page.'
       },
       {
-        title: 'Soft-Cover:',
-        text: 'The cover paper will be slightly thicker than the inside pages.'
+        title: 'Soft Cover:',
+        text: 'The cover paper is a light card stock - similar to an index card.'
       },
     ],
     inline: true,
-  },
-  {
-    id: 'coverPrinting',
-    label: 'Cover Printing',
-    type: 'check',
-    options: ['Front Cover', 'Back Cover', 'Inside Front Cover', 'Inside Back Cover'],
-    width: 4,
-    required: true,
-    error: false,
-    errorMsg: 'Please choose which cover printing options you would like.',
-    inline: false,
   },
   {
     id: 'binding',
@@ -152,12 +141,6 @@ export const defaultPriceFields = [
     errorMsg: 'Sorry, the promo code you entered is invalid.',
     success: false,
     successMsg: 'The promo code $code was successfully applied!',
-    help: [
-      {
-        title: 'Early Bird Pricing:',
-        text: 'This can be applied to any magazine printed before April 15. Enter the promo code LM-Early to receive the 10% Early Bird discount.'
-      },
-    ],
     inline: null,
   },
 ];

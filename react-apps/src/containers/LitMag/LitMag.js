@@ -19,17 +19,31 @@ import {
   defaultFileFields,
 } from '../../data/LitMagFormFields';
 
-const pagesToColor = {
-  id: 'pagesToColor',
-  label: 'Which Pages in Color',
-  placeholder: 'Example: 1, 3-6, 10, 12',
-  type: 'text',
-  options: null,
-  width: 4,
-  required: true,
-  error: false,
-  errorMsg: 'Please indicate which pages you would like to be in color.',
-  inline: null,
+// these are fields that we inject into the form based on certain criteria
+const dependentFields = {
+  pagesToColor : {
+    id: 'pagesToColor',
+    label: 'Which Pages in Color',
+    placeholder: 'Example: 1, 3-6, 10, 12',
+    type: 'text',
+    options: null,
+    width: 4,
+    required: true,
+    error: false,
+    errorMsg: 'Please indicate which pages you would like to be in color.',
+    inline: null,
+  },
+  coverPrinting: {
+    id: 'coverPrinting',
+    label: 'Cover Printing',
+    type: 'check',
+    options: ['Front Cover', 'Back Cover', 'Inside Front Cover', 'Inside Back Cover'],
+    width: 4,
+    required: true,
+    error: false,
+    errorMsg: 'Please choose which cover printing options you would like.',
+    inline: false,
+  }
 };
 
 // this is a simple mapping of which state params correspond to which fields
@@ -49,7 +63,7 @@ class LitMag extends Component {
       copies: '',
       insidePages: '',
       colorPages: '',
-      pagesToColor: 'None',
+      pagesToColor: '',
       paperStock: '',
       coverStyle: '',
       coverPrinting: [],
@@ -189,8 +203,18 @@ class LitMag extends Component {
       this.toggleDependentField(
         'publicationFields',
         'colorPages',
-        pagesToColor,
-        parseInt(target.value),
+        dependentFields.pagesToColor,
+        parseInt(target.value) > 0, // if the value is greater than zero, 'showChild' is true
+      );
+    }
+
+    // we need to display/hide the field for specifying which pages are in color
+    if (identifier === 'coverStyle') {
+      this.toggleDependentField(
+        'publicationFields',
+        'coverStyle',
+        dependentFields.coverPrinting,
+        target.value !== 'Self Cover (no cover)',
       );
     }
   };
@@ -339,7 +363,7 @@ class LitMag extends Component {
     );
   };
 
-  toggleDependentField = (stateKey, parentFieldId, childField, parentValue) => {
+  toggleDependentField = (stateKey, parentFieldId, childField, showChild) => {
     let fields = [...this.state[stateKey]];
     let childIndex = fields.findIndex(element => {
       return element.id === childField.id;
@@ -347,7 +371,7 @@ class LitMag extends Component {
 
     if (childIndex === -1) {
       // child does not appear in the state
-      if (parentValue > 0) {
+      if (showChild) {
         // > 0, show the child field
         const parentIndex = fields.findIndex(element => {
           return element.id === parentFieldId;
@@ -356,7 +380,7 @@ class LitMag extends Component {
           fields.splice(parentIndex + 1, 0, childField); // add it just after the parent field
         }
       }
-    } else if (parentValue === 0) {
+    } else if (!showChild) {
       // child is present but parent = 0, remove the child field
       fields.splice(childIndex, 1);
     }
@@ -459,11 +483,10 @@ class LitMag extends Component {
         changed={this.handleInputChange}
         fields={this.state.fileFields}
         stateData="files"
-        header="You may wish to compress your files to save transmission time. Files may be compressed as .zip or .sit files. PC users can use WinZip to create .zip files; Mac users should use Stuffit to create either .sit files or .zip (preferred) archives to prevent file corruption."
         footer={[
-          'MAXIMUM FILE SIZE IS 64 MB!',
+          'MAXIMUM FILE SIZE IS 90 MB!',
           <br key="break2" />,
-          'Files larger than 64 Mb will be rejected by the server! If you attach multiple files, the combined size can be no more than 64 MB. Call us if you need assistance.',
+          'Files larger than 90 Mb will be rejected by the server! If you attach multiple files, the combined size can be no more than 90 MB. Call us if you need assistance.',
         ]}
       />
     );
@@ -509,7 +532,7 @@ class LitMag extends Component {
             changed={this.handleInputChange}
             fields={this.state.publicationFields}
             stateData="pubInfo"
-            header="The options below are based on standard orders. If you are looking for a different paper stock, special size, or any other custom option please call our office to speak with us directly."
+            header="The options below are based on standard orders. If you are looking for a different paper stock, special size, or any other custom option please call our office at 1-(888)-543-1000 to speak with us directly."
           />
           <HorizontalFormSection
             title="Pricing"
@@ -523,7 +546,7 @@ class LitMag extends Component {
             footer={[
               'Ground shipping is included in the price.',
               <br key="break1" />,
-              'If you need expedited shipping, please contact our office for pricing.',
+              'If you need expedited shipping, please contact our office at 1-(888)-543-1000 for pricing.',
             ]}
           />
           {this.props.type === 'pricing' ? priceQuoteToggle : null}
