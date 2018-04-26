@@ -251,8 +251,8 @@ class LitMag extends Component {
       'Content-Type': 'multipart/form-data',
     });
 
-    fetch('http://www.schoolpub.com/lit-mag-submit.php', {
-    // fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
+    // fetch('http://www.schoolpub.com/lit-mag-submit.php', {
+    fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
       method: 'POST',
       mode: 'cors',
       header: header,
@@ -280,12 +280,7 @@ class LitMag extends Component {
   };
 
   parseStateIntoJson = () => {
-    // const { files } = this.state;
-    // send state data to submit script
     let data = new FormData();
-    // for (const fileKey in files) {
-    //   data.append(fileKey, files[fileKey]);
-    // }
     for (const formKey in formToStateMap) {
       const stateKey = formToStateMap[formKey];
       const stateData = this.state[stateKey];
@@ -293,6 +288,7 @@ class LitMag extends Component {
         const postKey = stateKey + '_' + subKey;
         data.append(postKey, stateData[subKey]);
       }
+      data.append('isQuote', this.props.type !== 'order-form');
     }
 
     return data;
@@ -327,7 +323,9 @@ class LitMag extends Component {
     if (submitStatus === true) {
       type = 'success';
       message =
-        'Your order is submitted! Check your email for additional instructions.';
+        this.props.type === 'order-form'
+          ? 'Your order is submitted! Check your email for additional instructions.'
+          : 'Your quote has been submitted! Someone will contact you shortly.';
     } else {
       type = 'danger';
       message =
@@ -367,16 +365,18 @@ class LitMag extends Component {
     });
   };
 
-  updatePromoField = (code) => {
+  updatePromoField = code => {
     let priceSection = [...this.state.priceFields];
     let promoData = this.getFieldData(priceSection, 'promo');
     if (code != null) {
       promoData['success'] = true;
       promoData['successMsg'] = promoData['successMsg'].replace('$code', code);
-    }
-    else {
+    } else {
       promoData['success'] = false;
-      const defaultPromoSection = this.getFieldData(defaultPriceFields, 'promo');
+      const defaultPromoSection = this.getFieldData(
+        defaultPriceFields,
+        'promo',
+      );
       const defaultSuccessMsg = defaultPromoSection['successMsg'];
       promoData['successMsg'] = defaultSuccessMsg;
       console.log('use default: ' + defaultSuccessMsg);
@@ -397,19 +397,22 @@ class LitMag extends Component {
   validateForm = (stateKey, formSection, stateParam) => {
     // go through each field. if it is required and the corresponding state is empty, return false (invalid)
     let invalidForm = formSection.some(field => {
-      if (field.required && this.isFieldEmpty(stateParam[field.id])) { // is required field non-empty?
+      if (field.required && this.isFieldEmpty(stateParam[field.id])) {
+        // is required field non-empty?
         field.error = true;
       } else if (
         field.required &&
         field.id === 'email' &&
         !stateParam[field.id].match(/\S+@\S+\.\S+/)
-      ) { // is email valid?
+      ) {
+        // is email valid?
         field.error = true;
       } else if (
         field.required &&
         field.id === 'zip' &&
         !stateParam[field.id].match(/^[0-9]{5}(?:-[0-9]{4})?$/)
-      ) { // is zipcode in right format?
+      ) {
+        // is zipcode in right format?
         field.error = true;
       } else {
         field.error = false;
@@ -429,6 +432,7 @@ class LitMag extends Component {
     const priceQuoteToggle = (
       <Checkbox
         name="priceQuoteToggle"
+        className={classes.QuoteToggle}
         onChange={() => {
           let toggleState = this.state.priceQuoteToggle;
           this.setState({

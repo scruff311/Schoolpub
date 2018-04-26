@@ -11,21 +11,29 @@
     
 	// Confirmation number
 	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), true)), 0, 7));
-/*
+
     // Set for remote server. Remove for localhost testing.
     if ($debugging == 0) {
-        ini_set("SMTP", "scriptmail.intermedia.net");
-        ini_set("sendmail_from", "orders@seniorpublishing.net");
+        ini_set("SMTP", "smtp.schoolpub.com");
+        ini_set("sendmail_from", "orders@schoolpub.com");
     }
-*/
 
-	$filenames = saveFiles($confirm);    
-    $subject = 'SPC Literary Magazine Order Confirmation #' . $confirm;
+    $isQuote = false;
+    if (isset($_POST['isQuote'])) {
+        $isQuote = $_POST['isQuote'];
+    }    
+    $filenames = saveFiles($confirm);
+    if ($isQuote) {
+        $subject = 'SPC Literary Magazine Quote #' . $confirm;    
+    }
+    else {
+        $subject = 'SPC Literary Magazine Order Confirmation #' . $confirm;
+    }
     $email = $_POST["schoolInfo_email"];
-    $message = buildMessage($email, $confirm);
+    $message = buildMessage($email, $confirm, $isQuote);
     // // Send confirmation email
-    // sendMail($email, $confirm, $subject, $message);
-    sendMailWithPhpMailer($email, $confirm, $subject, $message);
+    sendMail($email, $confirm, $subject, $message);
+    // sendMailWithPhpMailer($email, $confirm, $subject, $message);
 		
 function saveFiles($confirm) {
 	$filenames = array();
@@ -86,9 +94,9 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     // 1 = client messages
     // 2 = client and server messages
     // 3 = verbose debug output
-//		$mail->SMTPDebug = 3;
+	$mail->SMTPDebug = 3;
     //Ask for HTML-friendly debug output
-//		$mail->Debugoutput = 'html';
+	$mail->Debugoutput = 'html';
 
     // Set SMTP account
     if ($debugging) {
@@ -98,19 +106,20 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     else {
         // $username = 'spc.ad.orders@gmail.com';
         $username = 'spc.schoolpub@gmail.com';
-        $password = 'password_goes_here';
+        $password = 'Spc!07717';
     }
                                                    
     $mail->isSMTP();                                      // Set mailer to use SMTP
     $mail->Host = 'smtp.gmail.com';  					  // Specify main and backup SMTP servers
+    // $mail->Host = 'smtp.schoolpub.com';
     $mail->SMTPAuth = true;                               // Enable SMTP authentication
     $mail->Username = $username;                          // SMTP username
     $mail->Password = $password;                          // SMTP password
     $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
     $mail->Port = 587;                                    // TCP port to connect to
     
-    $mail->setFrom('orders@schoolpub.com', 'School Publications');
-    // $mail->setFrom('spc.schoolpub@gmail.com', 'School Publications');
+    // $mail->setFrom('orders@schoolpub.com', 'School Publications');
+    $mail->setFrom('spc.schoolpub@gmail.com', 'School Publications');
     // $mail->setFrom('kevin.smtp.test@gmail.com', 'School Publications');
 //		$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
     $mail->addAddress($email);               			  // Name is optional
@@ -142,39 +151,55 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     echo json_encode( $result );  
 }
 
-// Not used currently. Using PHPMailer function above instead
 function sendMail($email, $confirm, $subject, $message) {    
     global $debugging;
     
     // Set email
     $email_reply = "orders@schoolpub.com";
-	$email_from = "spc.schoolpub@gmail.com";
+    $email_bcc = "spc.schoolpub@gmail.com";
+	$email_from = "orders@schoolpub.com";
     if ($debugging == 1)
         $email_from = "kevinclark311@gmail.com";
 
     $headers = "From: " . $email_from . "\r\n";
     $headers .= "Reply-To: " . $email_reply . "\r\n";
-    $headers .= "BCC: " . $from_email . "\r\n";
+    $headers .= "BCC: " . $email_bcc . "\r\n";
 //    $headers .= "CC: kevin@translateabroad.com\r\n"; // jenn@seniorpublishing.net
     $headers .= "X-Mailer: PHP/" . phpversion();
     $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";   
 
-    if (mail($email, $subject, $message, $headers)) {
-        echo 'Email sent successfully!';
-    } else {
-        die('Failure: Email was not sent!');
-    }    
+    $result = ['response' => -1];
+    if (!mail($email, $subject, $message, $headers)) {
+        // echo 'Message could not be sent.<br>';
+        $result['response'] = 0;
+    } 
+    else {
+        // echo 'Message has been sent';
+        $result['response'] = 1;
+    }
+
+    header('Content-type: application/json');
+    echo json_encode( $result );
 }
 
-function buildMessage($email, $confirm) {
+function buildMessage($email, $confirm, $isQuote) {
     $message = '<html><body>';
-    $message .= "<h3><font face='Verdana, sans-serif' color='#576f75'>
+    if ($isQuote) {
+        $message .= "<h3><font face='Verdana, sans-serif' color='#576f75'>
+            Your quote has been submitted!</font></h3>";
+        $message .= "<p><font face='Verdana, sans-serif' size='-1' color='#000'>
+            We will contact you shortly to discuss your order and answer any questions you may have.</font></p>";
+        $message .= "<h4><font face='Verdana, serif' color='#576f75'>Order Summary:</font></h4>";
+    }
+    else {
+        $message .= "<h3><font face='Verdana, sans-serif' color='#576f75'>
             Your order has been submitted!</font></h3>";
-    $message .= "<p><font face='Verdana, sans-serif' size='-1' color='#000'>
+        $message .= "<p><font face='Verdana, sans-serif' size='-1' color='#000'>
             Please call School Publications at <b>1-888-637-3200</b> to finalize your order.
             Have your credit card information and confirmation number <b>" . $confirm . "</b> handy.</font></p>";
-    $message .= "<h4><font face='Verdana, serif' color='#576f75'>Order Summary:</font></h4>";
+        $message .= "<h4><font face='Verdana, serif' color='#576f75'>Order Summary:</font></h4>";
+    }
     
     $message .= createTable($email);
 
@@ -277,36 +302,6 @@ function createTable($email) {
     }
     
     return $table; 
-}
-
-function printTable() {
-    global $debugging;
-    
-   $email = "spc.schoolpub@gmail.com";
-    if ($debugging == 1)
-        $email = "kevinclark311@gmail.com";
-    
-    // Confirmation number
-    $confirm = strtoupper("PRINT_" . substr(md5(uniqid(rand(), true)), 0, 5));    
-    $subject = 'Print Notice #' . $confirm;
-
-    $headers = "From: " . $email . "\r\n";
-    $headers .= "Reply-To: " . $email . "\r\n";
-    $headers .= "X-Mailer: PHP/" . phpversion();
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
-    $message = "<html><body>";
-    $message .= "<h3><font face='Verdana, sans-serif' color='#576f75'>
-            A customer has printed a potential advertisement order (<b>#" . $confirm . "</b>).</font></h3>";
-    $message .= "<h4><font face='Verdana, sans-serif' color='#576f75'>Order Summary:</font></h4>";
-    $html = createTable();
-    $message .= $html;
-    $message .= "</body></html>";
-
-    mail($email, $subject, $message, $headers);
-   
-    return $html;
 }
 
 ?>

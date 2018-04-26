@@ -3,6 +3,10 @@
 	margin: auto;
 }
 
+.QuoteToggle {
+	margin-bottom: 30px !important;
+}
+
 .SubmitDiv {
 	position: relative;
 	padding-top: 20px;
