@@ -7,7 +7,7 @@
 	date_default_timezone_set("America/New_York");
 
 	// switch between debug (local) and live server params
-    $debugging = 0;
+    $debugging = 1;
     
 	// Confirmation number
 	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), true)), 0, 7));
@@ -31,9 +31,13 @@
     }
     $email = $_POST["schoolInfo_email"];
     $message = buildMessage($email, $confirm, $isQuote);
-    // // Send confirmation email
-    sendMail($email, $confirm, $subject, $message);
-    // sendMailWithPhpMailer($email, $confirm, $subject, $message);
+    // // Send confirmation email - use PHP mail on production server, PHPMailer on testing environment
+    if ($debugging != 1) {
+        sendMail($email, $confirm, $subject, $message);
+    }
+    else {
+        sendMailWithPhpMailer($email, $confirm, $subject, $message);
+    }
 		
 function saveFiles($confirm) {
 	$filenames = array();
@@ -94,7 +98,7 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     // 1 = client messages
     // 2 = client and server messages
     // 3 = verbose debug output
-	$mail->SMTPDebug = 3;
+	$mail->SMTPDebug = 0;
     //Ask for HTML-friendly debug output
 	$mail->Debugoutput = 'html';
 
@@ -118,9 +122,7 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
     $mail->Port = 587;                                    // TCP port to connect to
     
-    // $mail->setFrom('orders@schoolpub.com', 'School Publications');
-    $mail->setFrom('spc.schoolpub@gmail.com', 'School Publications');
-    // $mail->setFrom('kevin.smtp.test@gmail.com', 'School Publications');
+    $mail->setFrom('kevin.smtp.test@gmail.com', 'School Publications');
 //		$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
     $mail->addAddress($email);               			  // Name is optional
 	$mail->addReplyTo('orders@schoolpub.com', 'School Publications');
@@ -158,8 +160,6 @@ function sendMail($email, $confirm, $subject, $message) {
     $email_reply = "orders@schoolpub.com";
     $email_bcc = "spc.schoolpub@gmail.com";
 	$email_from = "orders@schoolpub.com";
-    if ($debugging == 1)
-        $email_from = "kevinclark311@gmail.com";
 
     $headers = "From: " . $email_from . "\r\n";
     $headers .= "Reply-To: " . $email_reply . "\r\n";
@@ -229,6 +229,7 @@ function createTable($email) {
     $cover = $_POST["pubInfo_coverStyle"];
     $coverPrintingOptions = str_replace(',', ', ', $_POST['pubInfo_coverPrinting']); // add space after commas
     $binding = $_POST["pubInfo_binding"];
+    $instructions = $_POST["pubInfo_instructions"];
 
 	// contact info
     $advisorName = ucwords(strtolower($_POST["schoolInfo_advisorName"]));
@@ -238,7 +239,9 @@ function createTable($email) {
     $state = $_POST["schoolInfo_state"];
     $zip = $_POST["schoolInfo_zip"];
 	$phone = $_POST["schoolInfo_phone"];
-		
+    
+    // price
+    $promoCode = $_POST['price_promo'];
 	setlocale(LC_MONETARY, 'en_US.UTF-8');
     $total = money_format('%.2n', $_POST['price_total']);    
 		
@@ -271,22 +274,36 @@ function createTable($email) {
                     <td style='font-family: Verdana, sans-serif;'>" . $pages . "</td></tr>";
     $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Number of Color Pages:</strong> </td>
                     <td style='font-family: Verdana, sans-serif;'>" . $color . "</td></tr>";
-    $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Pages to Color:</strong> </td>
-                    <td style='font-family: Verdana, sans-serif;'>" . $pagesToColor . "</td></tr>";
+    if (!empty($pagesToColor)) {
+        $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Pages to Color:</strong> </td>
+        <td style='font-family: Verdana, sans-serif;'>" . $pagesToColor . "</td></tr>";
+    }
     $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Paper Stock:</strong> </td>
                     <td style='font-family: Verdana, sans-serif;'>" . $paper . "</td></tr>";
     $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Cover Style:</strong> </td>
                     <td style='font-family: Verdana, sans-serif;'>" . $cover . "</td></tr>";
-    $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Cover Printing:</strong> </td>
-                    <td style='font-family: Verdana, sans-serif;'>" . $coverPrintingOptions . "</td></tr>";
+    if (!empty($coverPrintingOptions)) {
+        $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Cover Printing:</strong> </td>
+        <td style='font-family: Verdana, sans-serif;'>" . $coverPrintingOptions . "</td></tr>";
+    }
     $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Binding:</strong> </td>
                     <td style='font-family: Verdana, sans-serif;'>" . $binding . "</td></tr>";
     $table .= "</table><br />";
     
     // price
     $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 14px;'>
-                    <b>Order Total: " . $total . "</b></p>";						
-    
+                    <b>Order Total: " . $total . "</b></p><br />";
+    // promo
+    if (!empty($promoCode)) {
+        $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif;'>
+                        <b>Promo Code:</b> " . $promoCode . "</p>";
+    }
+    // instructions
+    if (!empty($instructions)) {
+        $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif;'>
+                        <b>Special Instructions:</b> " . $instructions . "</p>";
+    }
+
     // Remove empty strings from $filenames array
     $filenames_mod = implode('', $filenames);
     // Create Uploaded Files table if $filenames_mod is non-empty

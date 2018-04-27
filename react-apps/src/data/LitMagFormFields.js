@@ -127,6 +127,18 @@ export const defaultPublicationFields = [
     ],
     inline: true,
   },
+  {
+    id: 'instructions',
+    label: 'Special Instructions',
+    type: 'textarea',
+    placeholder: 'Enter any additional information here',
+    options: null,
+    width: 6,
+    required: false,
+    error: false,
+    errorMsg: null,
+    inline: null,
+  },
 ];
 
 export const defaultPriceFields = [

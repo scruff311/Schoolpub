@@ -101,7 +101,7 @@ export function updateLitMagPrice(pubInfo, price) {
   const promoCode = price.promo;
 
   // calculate the globals using the old form format for cover, i.e. soft vs Soft-Cover
-  const coverOldFormat = cover === 'Soft-Cover' ? 'soft' : 'self';
+  const coverOldFormat = cover === 'Soft Cover (thicker cover)' ? 'soft' : 'self';
   calculateGlobals(pages, copies, color, coverOldFormat);
 
   var printingCost = 0;

@@ -9,7 +9,7 @@ import {
 } from 'react-bootstrap';
 import Aux from '../../hoc/Aux';
 import TextAndFileInput from './TextAndFileInput';
-import DropdownInput from './DropdownInput';
+import DropdownAndTextAreaInput from './DropdownAndTextAreaInput';
 import RadioAndCheckboxGroup from './RadioAndCheckboxGroup';
 
 class FormField extends Component {
@@ -60,9 +60,10 @@ class FormField extends Component {
 
   render() {
     let control = null;
-    if (this.props.type === 'select') {
+    if (this.props.type === 'select'|| this.props.type === 'textarea') {
       control = (
-        <DropdownInput
+        <DropdownAndTextAreaInput
+          type={this.props.type}
           placeholder={this.props.placeholder}
           changed={this.props.changed}
           dataHandle={this.props.dataHandle}
