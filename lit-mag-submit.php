@@ -18,10 +18,8 @@
         ini_set("sendmail_from", "orders@schoolpub.com");
     }
 
-    $isQuote = false;
-    if (isset($_POST['isQuote'])) {
-        $isQuote = $_POST['isQuote'];
-    }    
+    $isQuote = filter_var ($_POST['isQuote'], FILTER_VALIDATE_BOOLEAN);
+
     $filenames = saveFiles($confirm);
     if ($isQuote) {
         $subject = 'SPC Literary Magazine Quote #' . $confirm;    
@@ -243,7 +241,10 @@ function createTable($email) {
     // price
     $promoCode = $_POST['price_promo'];
 	setlocale(LC_MONETARY, 'en_US.UTF-8');
-    $total = money_format('%.2n', $_POST['price_total']);    
+    $total = money_format('%.2n', $_POST['price_total']);
+
+    // proof
+    $proof = $_POST['files_proof'];
 		
 	// contact info table
     $table = '<table rules="all" frame="box" cellpadding="6" style="color: #212a2c; font-size: 11px;">';
@@ -288,6 +289,10 @@ function createTable($email) {
     }
     $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Binding:</strong> </td>
                     <td style='font-family: Verdana, sans-serif;'>" . $binding . "</td></tr>";
+    if (!empty($proof)) {
+        $table .= "<tr><td style='font-family: Verdana, sans-serif;'><strong>Send Proof:</strong> </td>
+        <td style='font-family: Verdana, sans-serif;'>" . $proof . "</td></tr>";
+    }
     $table .= "</table><br />";
     
     // price
@@ -295,12 +300,12 @@ function createTable($email) {
                     <b>Order Total: " . $total . "</b></p><br />";
     // promo
     if (!empty($promoCode)) {
-        $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif;'>
+        $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>
                         <b>Promo Code:</b> " . $promoCode . "</p>";
     }
     // instructions
     if (!empty($instructions)) {
-        $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif;'>
+        $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>
                         <b>Special Instructions:</b> " . $instructions . "</p>";
     }
 

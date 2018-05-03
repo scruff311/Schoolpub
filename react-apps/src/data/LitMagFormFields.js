@@ -334,4 +334,29 @@ export const defaultFileFields = [
     errorMsg: null,
     inline: null,
   },
+  {
+    id: 'proof',
+    label: 'Send Proof',
+    type: 'select',
+    options: ['', 'Yes - Printed (recommended)', 'Yes - PDF', 'No'],
+    width: 4,
+    required: true,
+    error: false,
+    errorMsg: 'Please choose an option for proof.',
+    help: [
+      {
+        title: 'Yes - Printed (recommended):',
+        text: 'You will receive an exact printed copy of your magazine to approve before going to production.'
+      },
+      {
+        title: 'Yes - PDF:',
+        text: 'You will receive a PDF proof of your magazine. You can check for typos, but color and page alignment may not be accurate.'
+      },
+      {
+        title: 'No:',
+        text: 'You will not receive a proof and you are responsible for any errors, color discrepancies, and page alignment.'
+      },
+    ],
+    inline: null,
+  },
 ];

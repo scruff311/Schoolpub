@@ -88,6 +88,7 @@ class LitMag extends Component {
       file1: null,
       file2: null,
       file3: null,
+      proof: '',
     },
     publicationFields: [...defaultPublicationFields],
     priceFields: [...defaultPriceFields],
@@ -313,9 +314,8 @@ class LitMag extends Component {
         const postKey = stateKey + '_' + subKey;
         data.append(postKey, stateData[subKey]);
       }
-      data.append('isQuote', this.props.type !== 'order-form');
     }
-
+    data.append('isQuote', this.props.type !== 'order-form');
     return data;
   };
 
@@ -404,10 +404,8 @@ class LitMag extends Component {
       );
       const defaultSuccessMsg = defaultPromoSection['successMsg'];
       promoData['successMsg'] = defaultSuccessMsg;
-      console.log('use default: ' + defaultSuccessMsg);
     }
 
-    console.log(promoData['successMsg']);
     this.updateFormField('priceFields', priceSection, promoData);
   };
 
