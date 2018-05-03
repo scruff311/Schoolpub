@@ -7,7 +7,7 @@
 	date_default_timezone_set("America/New_York");
 
 	// switch between debug (local) and live server params
-    $debugging = 1;
+    $debugging = 0;
     
 	// Confirmation number
 	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), true)), 0, 7));

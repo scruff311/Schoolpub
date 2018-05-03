@@ -277,8 +277,8 @@ class LitMag extends Component {
       'Content-Type': 'multipart/form-data',
     });
 
-    // fetch('http://www.schoolpub.com/lit-mag-submit.php', {
-    fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
+    fetch('https://www.schoolpub.com/lit-mag-submit.php', {
+    // fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
       method: 'POST',
       mode: 'cors',
       header: header,
