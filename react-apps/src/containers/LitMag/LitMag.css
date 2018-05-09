@@ -3,6 +3,22 @@
 	margin: auto;
 }
 
+.DarkGreen {
+	color: #060;
+}
+
+.LightBlue {
+	background-color: #64ABD1;
+}
+
+.PricingHeader {
+	margin: 20px auto auto auto;
+	color: #777;
+	text-align: center;
+	width: 90%;
+  max-width: 675px;
+}
+
 .QuoteToggle {
 	margin-bottom: 30px !important;
 }

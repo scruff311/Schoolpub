@@ -337,7 +337,7 @@ class LitMag extends Component {
         data.append(postKey, stateData[subKey]);
       }
     }
-    data.append('isQuote', this.props.type !== 'order-form');
+    data.append('isQuote', this.props.type !== 'orderForm');
     return data;
   };
 
@@ -370,7 +370,7 @@ class LitMag extends Component {
     if (submitStatus === true) {
       type = 'success';
       message =
-        this.props.type === 'order-form'
+        this.props.type === 'orderForm'
           ? 'Your order is submitted! Check your email for additional instructions.'
           : 'Your quote has been submitted! Someone will contact you shortly.';
     } else {
@@ -470,7 +470,7 @@ class LitMag extends Component {
 
   render() {
     const title =
-      this.props.type === 'order-form'
+      this.props.type === 'orderForm'
         ? 'Magazine Order Form'
         : 'Magazine Pricing';
 
@@ -521,8 +521,9 @@ class LitMag extends Component {
             bsSize="large"
             bsStyle="primary"
             type="submit"
+            className={classes.LightBlue}
           >
-            {this.props.type === 'order-form'
+            {this.props.type === 'orderForm'
               ? 'Submit Order'
               : 'Submit for Quote'}
           </Button>
@@ -539,9 +540,9 @@ class LitMag extends Component {
 
     return (
       <div className={classes.LitMag}>
-        <h1>{title}</h1>
+        <h1 className={classes.DarkGreen}>{title}</h1>
         {this.props.type === 'pricing' ? (
-          <h4 style={{ marginTop: 30, color: '#777' }}>
+          <h4 className={classes.PricingHeader}>
             SPC has the lowest magazine prices in the industry and the fastest
             production time, with just a 5 business day turnaround (plus
             shipping time).
@@ -571,11 +572,11 @@ class LitMag extends Component {
             ]}
           />
           {this.props.type === 'pricing' ? priceQuoteToggle : null}
-          {this.props.type === 'order-form' || this.state.priceQuoteToggle
+          {this.props.type === 'orderForm' || this.state.priceQuoteToggle
             ? schoolInfoForm
             : null}
-          {this.props.type === 'order-form' ? fileUploadForm : null}
-          {this.props.type === 'order-form' || this.state.priceQuoteToggle
+          {this.props.type === 'orderForm' ? fileUploadForm : null}
+          {this.props.type === 'orderForm' || this.state.priceQuoteToggle
             ? submitButton
             : null}
         </Form>
