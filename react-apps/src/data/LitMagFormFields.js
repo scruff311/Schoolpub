@@ -70,7 +70,7 @@ export const defaultPublicationFields = [
     help: [
       {
         title: 'Offset:',
-        text: 'This is a 60lb uncoated or matte finish paper similar to the paper in your personal printer. Best suited for art and prose. (Recommended)'
+        text: 'This is a 60lb uncoated or matte finish paper similar to the paper in your personal printer. Best suited for art and prose. (recommended)'
       },
       {
         title: 'Coated:',
@@ -339,7 +339,7 @@ export const defaultFileFields = [
     label: 'Send Proof',
     type: 'select',
     options: ['', 'Yes - Printed (recommended)', 'Yes - PDF', 'No'],
-    width: 4,
+    width: 3,
     required: true,
     error: false,
     errorMsg: 'Please choose an option for proof.',

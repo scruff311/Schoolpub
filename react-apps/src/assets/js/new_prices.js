@@ -1,17 +1,17 @@
 // ############ Constants ############
-const blackChargePerPagePerCopy = 0.14;
-const colorChargePerPagePerCopy = 0.06;
-const insideCoatedCost = 0.05;
-const insideOffsetCost = 0.03;
-const coverStock = 0.3;
-const base = 80;
-const coverBase = 15;
-const secPerPage = 2;
-const colorClick = 0.049;
+const blackChargePerPagePerCopy = 0.044;
+const colorChargePerPagePerCopy = 0.033;
+const insideCoatedCost = 0.0429;
+const insideOffsetCost = 0.0297;
 const blackClick = 0.0129;
+const colorClick = 0.049;
+const ship = 0.007;
+const coverStock = 0.3;
+const coverBase = 15;
+const base = 175;
+const secPerPage = 2;
 const typeSet = 15;
 const scanPages = 5;
-const ship = 0.007;
 const halfSizeMult = 0.85;
 const perfectBound = 0.5;
 
@@ -36,6 +36,69 @@ function calculateGlobals(pages, copies, color, cover) {
   if (cover === 'soft') clickCharge += copies * colorClick;
 
   hemColorCost = 20 * color;
+}
+
+export function updateLitMagPrice(pubInfo, price) {
+  const dimensions = pubInfo.dimensions;
+  const copies = parseInt(pubInfo.copies);
+  const pages = parseInt(pubInfo.insidePages);
+  const color = parseInt(pubInfo.colorPages);
+  const paper = pubInfo.paperStock;
+  const cover = pubInfo.coverStyle;
+  const binding = pubInfo.binding;
+  const promoCode = price.promo;
+
+  // calculate the globals using the old form format for cover, i.e. soft vs Soft-Cover
+  const coverOldFormat = cover === 'Soft Cover (thicker cover)' ? 'soft' : 'self';
+  calculateGlobals(pages, copies, color, coverOldFormat);
+
+  var printingCost = 0;
+  if (isHemingway(copies, color, pages)) {
+    // this is a high volume run w/ either no color or all color, AKA Hemingway
+    printingCost = hemingway(pages, copies, coverOldFormat);
+  } else {
+    // Poe, Dickinson, Frost
+    // this is the only difference between poe and dickinson
+    const paperCost = paper === 'Coated' ? coatedPaperCost : offsetPaperCost;
+
+    // this decides poe/dickinson vs frost. including 'Other' here to give high end of price
+    // in quote (could be lower if the size is closer to frost sizes)
+    const largeFormat = ['7 x 10', '8 x 8', '8.5 x 11', 'Other'];
+
+    var total = blackCost + addColorCost + paperCost + base;
+    if (coverOldFormat === 'soft') {
+      total +=
+        (copies * colorChargePerPagePerCopy * 3.5) + (copies * coverStock) + coverBase;
+    }
+    const sizeMultiplier = largeFormat.includes(dimensions)
+      ? 1
+      : halfSizeMult;
+    printingCost = total * sizeMultiplier;
+  }
+
+  // add the perfect bound cost if it is selected
+  printingCost += (binding === 'Perfect Bound') ? (perfectBound * copies) : 0;
+
+  // apply the promo if applicable
+  const finalCost = applyPromo(printingCost, promoCode);
+
+  return finalCost;
+}
+
+function isHemingway(copies, color, pages) {
+  // return (copies >= 800 && copies % 100 === 0 && (color === 0 || color === pages));
+  return false;
+}
+
+function applyPromo(cost, code) {
+  const today = new Date();
+  const april15 = new Date('04/15/' + today.getFullYear());
+
+  if (code.toLowerCase() === 'lm-early' && today < april15) {
+    return {'total': 0.9 * cost, 'promo-applied': 'LM-Early'};
+  }
+
+  return {'total': cost, 'promo-applied': null};
 }
 
 function poe(copies, cover) {
@@ -87,55 +150,6 @@ function calcHardCover(copies) {
   else if (copies >= 800 && copies < 900) return copies * 9;
   else if (copies >= 900 && copies < 1000) return copies * 8.85;
   else return copies * 8.7;
-}
-
-export function updateLitMagPrice(pubInfo, price) {
-
-  const dimensions = pubInfo.dimensions;
-  const copies = parseInt(pubInfo.copies);
-  const pages = parseInt(pubInfo.insidePages);
-  const color = parseInt(pubInfo.colorPages);
-  const paper = pubInfo.paperStock;
-  const cover = pubInfo.coverStyle;
-  const binding = pubInfo.binding;
-  const promoCode = price.promo;
-
-  // calculate the globals using the old form format for cover, i.e. soft vs Soft-Cover
-  const coverOldFormat = cover === 'Soft Cover (thicker cover)' ? 'soft' : 'self';
-  calculateGlobals(pages, copies, color, coverOldFormat);
-
-  var printingCost = 0;
-  if (copies >= 800 && copies % 100 === 0 && (color === 0 || color === pages)) {
-    // this is a high volume run w/ either no color or all color, AKA Hemingway
-    console.log('hemingway');
-    printingCost = hemingway(pages, copies, coverOldFormat);
-  } else {
-    // Poe, Dickinson, Frost
-    // this is the only difference between poe and dickinson
-    const paperCost = paper === 'Coated' ? coatedPaperCost : offsetPaperCost;
-
-    // this decides poe/dickinson vs frost. including 'Other' here to give high end of price
-    // in quote (could be lower if the size is closer to frost sizes)
-    const largeFormat = ['7 x 10', '8 x 8', '8.5 x 11', 'Other'];
-
-    var total = blackCost + addColorCost + paperCost + base;
-    if (coverOldFormat === 'soft') {
-      total +=
-        (copies * colorChargePerPagePerCopy * 3.5) + (copies * coverStock) + coverBase;
-    }
-    const sizeMultiplier = largeFormat.includes(dimensions)
-      ? 1
-      : halfSizeMult;
-    printingCost = total * sizeMultiplier;
-  }
-
-  // add the perfect bound cost if it is selected
-  printingCost += (binding === 'Perfect Bound') ? (perfectBound * copies) : 0;
-
-  // apply the promo if applicable
-  const finalCost = applyPromo(printingCost, promoCode);
-
-  return finalCost;
 }
 
 function updatePrice(sender) {
@@ -202,17 +216,6 @@ function updatePrice(sender) {
     //    document.getElementById("shipping").innerHTML = "--";
     //    document.getElementById("grand_total").innerHTML = "--";
   }
-}
-
-function applyPromo(cost, code) {
-  const today = new Date();
-  const april15 = new Date('04/15/' + today.getFullYear());
-
-  if (code.toLowerCase() === 'lm-early' && today < april15) {
-    return {'total': 0.9 * cost, 'promo-applied': 'LM-Early'};
-  }
-
-  return {'total': cost, 'promo-applied': null};
 }
 
 // Rebuild color selection to be 0 - number of pages. Hemingway only gets No or Yes.
