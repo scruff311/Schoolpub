@@ -7,13 +7,13 @@
 	date_default_timezone_set("America/New_York");
 
 	// switch between debug (local) and live server params
-    $debugging = 0;
+    $debugging = FALSE;
     
 	// Confirmation number
-	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), true)), 0, 7));
+	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), TRUE)), 0, 7));
 
     // Set for remote server. Remove for localhost testing.
-    if ($debugging == 0) {
+    if (!$debugging) {
         ini_set("SMTP", "smtp.schoolpub.com");
         ini_set("sendmail_from", "orders@schoolpub.com");
     }
@@ -30,7 +30,7 @@
     $email = $_POST["schoolInfo_email"];
     $message = buildMessage($email, $confirm, $isQuote);
     // // Send confirmation email - use PHP mail on production server, PHPMailer on testing environment
-    if ($debugging != 1) {
+    if (!$debugging) {
         sendMail($email, $confirm, $subject, $message);
     }
     else {
@@ -52,7 +52,7 @@ function saveFiles($confirm) {
         
         // $directory = $_SERVER['DOCUMENT_ROOT'] . "/uploads/";
         $directory = dirname(__FILE__) . "/uploads/";
-        if (!is_dir($directory)) mkdir($directory, 0777, true);
+        if (!is_dir($directory)) mkdir($directory, 0777, TRUE);
 
         if (is_writable($directory)) {
             // do upload logic here
@@ -64,7 +64,7 @@ function saveFiles($confirm) {
 
             // create a folder for this confirmation number if it doesn't exist
             // if (!is_dir($directory)) {
-            // 	mkdir($directory, 0777, true);
+            // 	mkdir($directory, 0777, TRUE);
             // }
 
             if (move_uploaded_file($t, $file_path)) {
@@ -87,7 +87,6 @@ function saveFiles($confirm) {
 }
 
 function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
-    global $debugging;
     require 'PHPMailer/PHPMailerAutoload.php';    	
     $mail = new PHPMailer;
 
@@ -101,20 +100,13 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
 	$mail->Debugoutput = 'html';
 
     // Set SMTP account
-    if ($debugging) {
-        $username = 'kevin.smtp.test@gmail.com';
-        $password = 'ema!ltester';
-    }
-    else {
-        // $username = 'spc.ad.orders@gmail.com';
-        $username = 'spc.schoolpub@gmail.com';
-        $password = 'Spc!07717';
-    }
+    $username = 'kevin.smtp.test@gmail.com';
+    $password = 'ema!ltester';
                                                    
     $mail->isSMTP();                                      // Set mailer to use SMTP
     $mail->Host = 'smtp.gmail.com';  					  // Specify main and backup SMTP servers
     // $mail->Host = 'smtp.schoolpub.com';
-    $mail->SMTPAuth = true;                               // Enable SMTP authentication
+    $mail->SMTPAuth = TRUE;                               // Enable SMTP authentication
     $mail->Username = $username;                          // SMTP username
     $mail->Password = $password;                          // SMTP password
     $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
@@ -130,7 +122,7 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     // $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
 //		$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 //		$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-    $mail->isHTML(true);                                  // Set email format to HTML
+    $mail->isHTML(TRUE);                                  // Set email format to HTML
     
     $mail->Subject = $subject;
     $mail->Body    = $message;
@@ -151,9 +143,7 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     echo json_encode( $result );  
 }
 
-function sendMail($email, $confirm, $subject, $message) {    
-    global $debugging;
-    
+function sendMail($email, $confirm, $subject, $message) {        
     // Set email
     $email_reply = "orders@schoolpub.com";
     $email_bcc = "spc.schoolpub@gmail.com";
@@ -199,7 +189,7 @@ function buildMessage($email, $confirm, $isQuote) {
         $message .= "<h4><font face='Verdana, serif' color='#576f75'>Order Summary:</font></h4>";
     }
     
-    $message .= createTable($email);
+    $message .= createTable($email, $isQuote);
 
     $message .= "<br /><p><font face='Verdana, sans-serif' size='-1' color='#000'>
             Thank you,<br>School Publications Company Customer Service</font></p>";
@@ -210,7 +200,7 @@ function buildMessage($email, $confirm, $isQuote) {
     return $message;
 }
 
-function createTable($email) {    
+function createTable($email, $isQuote) {    
     global $filenames;
 
 	// publication info
@@ -296,8 +286,9 @@ function createTable($email) {
     $table .= "</table><br />";
     
     // price
+    $totalText = $isQuote ? "Total: " : "Order Total: ";
     $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 14px;'>
-                    <b>Order Total: " . $total . "</b></p><br />";
+                    <b>" . $totalText . $total . "</b></p><br />";
     // promo
     if (!empty($promoCode)) {
         $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>

@@ -105,7 +105,7 @@ class LitMag extends Component {
     priceFields: [...defaultPriceFields],
     schoolInfoFields: [...defaultSchoolInfoFields],
     fileFields: [...defaultFileFields],
-    priceQuoteToggle: false,
+    isFormalQuote: false,
     submitStatus: null,
     submitDisabled: false,
     isSubmittingForm: false,
@@ -276,8 +276,11 @@ class LitMag extends Component {
   handleSubmitOrder = e => {
     e.preventDefault();
     let isFormInvalid = Object.keys(formToStateMap).some(key => {
-      let formSection = this.state[key];
-      let stateParam = this.state[formToStateMap[key]];
+      if (!this.isOrderForm() && key === 'fileFields') { // skip file validation for formal quote
+        return false
+      }
+      let formSection = this.state[key]; // i.e publicationFields
+      let stateParam = this.state[formToStateMap[key]]; // i.e. pubInfo
       return !this.validateForm(key, formSection, stateParam);
     });
 
@@ -291,6 +294,10 @@ class LitMag extends Component {
       this.postFormToServer();
     }
   };
+
+  isOrderForm = () => {
+    return this.props.type === 'orderForm'
+  }
 
   postFormToServer = () => {
     const data = this.parseStateIntoJson();
@@ -370,7 +377,7 @@ class LitMag extends Component {
     if (submitStatus === true) {
       type = 'success';
       message =
-        this.props.type === 'orderForm'
+        this.isOrderForm()
           ? 'Your order is submitted! Check your email for additional instructions.'
           : 'Your quote has been submitted! Someone will contact you shortly.';
     } else {
@@ -446,14 +453,12 @@ class LitMag extends Component {
         // is required field non-empty?
         field.error = true;
       } else if (
-        field.required &&
         field.id === 'email' &&
         !stateParam[field.id].match(/\S+@\S+\.\S+/)
       ) {
         // is email valid?
         field.error = true;
       } else if (
-        field.required &&
         field.id === 'zip' &&
         !stateParam[field.id].match(/^[0-9]{5}(?:-[0-9]{4})?$/)
       ) {
@@ -470,7 +475,7 @@ class LitMag extends Component {
 
   render() {
     const title =
-      this.props.type === 'orderForm'
+      this.isOrderForm()
         ? 'Magazine Order Form'
         : 'Magazine Pricing';
 
@@ -479,9 +484,9 @@ class LitMag extends Component {
         name="priceQuoteToggle"
         className={classes.QuoteToggle}
         onChange={() => {
-          let toggleState = this.state.priceQuoteToggle;
+          let toggleState = this.state.isFormalQuote;
           this.setState({
-            priceQuoteToggle: !toggleState,
+            isFormalQuote: !toggleState,
           });
         }}
       >
@@ -523,7 +528,7 @@ class LitMag extends Component {
             type="submit"
             className={classes.LightBlue}
           >
-            {this.props.type === 'orderForm'
+            {this.isOrderForm()
               ? 'Submit Order'
               : 'Submit for Quote'}
           </Button>
@@ -541,7 +546,7 @@ class LitMag extends Component {
     return (
       <div className={classes.LitMag}>
         <h1 className={classes.DarkGreen}>{title}</h1>
-        {this.props.type === 'pricing' ? (
+        {!this.isOrderForm() ? (
           <h4 className={classes.PricingHeader}>
             SPC has the lowest magazine prices in the industry and the fastest
             production time, with just a 5 business day turnaround (plus
@@ -571,12 +576,12 @@ class LitMag extends Component {
               'If you need expedited shipping, please contact our office at 1-(888)-543-1000 for pricing.',
             ]}
           />
-          {this.props.type === 'pricing' ? priceQuoteToggle : null}
-          {this.props.type === 'orderForm' || this.state.priceQuoteToggle
+          {this.isOrderForm() ? null : priceQuoteToggle}
+          {this.isOrderForm() || this.state.isFormalQuote
             ? schoolInfoForm
             : null}
-          {this.props.type === 'orderForm' ? fileUploadForm : null}
-          {this.props.type === 'orderForm' || this.state.priceQuoteToggle
+          {this.isOrderForm() ? fileUploadForm : null}
+          {this.isOrderForm() || this.state.isFormalQuote
             ? submitButton
             : null}
         </Form>
