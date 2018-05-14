@@ -13,7 +13,6 @@ const secPerPage = 2;
 const typeSet = 15;
 const scanPages = 5;
 const halfSizeMult = 0.85;
-const perfectBound = 0.5;
 
 // ############ Initialize Global Vars #############
 var blackCost = 0;
@@ -77,12 +76,23 @@ export function updateLitMagPrice(pubInfo, price) {
   }
 
   // add the perfect bound cost if it is selected
-  printingCost += (binding === 'Perfect Bound') ? (perfectBound * copies) : 0;
+  printingCost += (binding === 'Perfect Bound') ? addPerfectBoundCharge(copies) : 0;
 
   // apply the promo if applicable
   const finalCost = applyPromo(printingCost, promoCode);
 
   return finalCost;
+}
+
+function addPerfectBoundCharge(copies) {
+  if (copies <= 150) {
+    return copies;
+  }
+  else if (copies <= 300) {
+    return copies * 0.75;
+  }
+  // > 300 copies
+  return copies * 0.5;
 }
 
 function isHemingway(copies, color, pages) {
