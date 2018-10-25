@@ -13,10 +13,10 @@
 	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), TRUE)), 0, 7));
 
     // Set for remote server. Remove for localhost testing.
-    if (!$debugging) {
-        ini_set("SMTP", "smtp.schoolpub.com");
-        ini_set("sendmail_from", "orders@schoolpub.com");
-    }
+    // if (!$debugging) {
+    //     ini_set("SMTP", "smtp.schoolpub.com");
+    //     ini_set("sendmail_from", "orders@schoolpub.com");
+    // }
 
     $isQuote = filter_var ($_POST['isQuote'], FILTER_VALIDATE_BOOLEAN);
 
@@ -30,12 +30,12 @@
     $email = $_POST["schoolInfo_email"];
     $message = buildMessage($email, $confirm, $isQuote);
     // // Send confirmation email - use PHP mail on production server, PHPMailer on testing environment
-    if (!$debugging) {
-        sendMail($email, $confirm, $subject, $message);
-    }
-    else {
+    // if (!$debugging) {
+    //     sendMail($email, $confirm, $subject, $message);
+    // }
+    // else {
         sendMailWithPhpMailer($email, $confirm, $subject, $message);
-    }
+    // }
 		
 function saveFiles($confirm) {
 	$filenames = array();
@@ -87,37 +87,39 @@ function saveFiles($confirm) {
 }
 
 function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
-    require 'PHPMailer/PHPMailerAutoload.php';    	
-    $mail = new PHPMailer;
+    global $debugging;
+
+    require 'PHPMailer_5.2.0/class.phpmailer.php';    	
+    $mail = new PHPMailer();
 
     //Enable SMTP debugging
     // 0 = off (for production use)
     // 1 = client messages
     // 2 = client and server messages
     // 3 = verbose debug output
-	$mail->SMTPDebug = 0;
+	$mail->SMTPDebug = $debugging ? 3 : 0;
     //Ask for HTML-friendly debug output
 	$mail->Debugoutput = 'html';
 
     // Set SMTP account
-    $username = 'kevin.smtp.test@gmail.com';
-    $password = 'ema!ltester';
+    $username = $debugging ? 'kevin.smtp.test@gmail.com' : 'kevin@schoolpub.com';
+    $password = $debugging ? 'ema!ltester' : 'Spc!pass07717';
+    $host = $debugging ? 'smtp.gmail.com' : 'localhost';
                                                    
-    $mail->isSMTP();                                      // Set mailer to use SMTP
-    $mail->Host = 'smtp.gmail.com';  					  // Specify main and backup SMTP servers
-    // $mail->Host = 'smtp.schoolpub.com';
-    $mail->SMTPAuth = TRUE;                               // Enable SMTP authentication
-    $mail->Username = $username;                          // SMTP username
-    $mail->Password = $password;                          // SMTP password
-    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-    $mail->Port = 587;                                    // TCP port to connect to
+    $mail->isSMTP();                          // Set mailer to use SMTP
+    $mail->Host = $host;  					  // Specify main and backup SMTP servers
+    $mail->SMTPAuth = TRUE;                   // Enable SMTP authentication
+    $mail->Username = $username;              // SMTP username
+    $mail->Password = $password;              // SMTP password
+    // $mail->SMTPSecure = 'tls';                // Enable TLS encryption, `ssl` also accepted
+    // $mail->Port = 587;                        // TCP port to connect to
     
-    $mail->setFrom('kevin.smtp.test@gmail.com', 'School Publications');
+    $mail->setFrom($username, 'School Publications');
 //		$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
     $mail->addAddress($email);               			  // Name is optional
 	$mail->addReplyTo('orders@schoolpub.com', 'School Publications');
 //		$mail->addCC('cc@example.com');
-//		$mail->addBCC('bcc@example.com');
+	$mail->addBCC('orders@schoolpub.com');
 
     // $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
 //		$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
@@ -139,6 +141,9 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
         $result['response'] = 1;
     }
 
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: PUT, GET, POST');
+    header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
     header('Content-type: application/json');
     echo json_encode( $result );  
 }
