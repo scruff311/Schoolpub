@@ -116,10 +116,10 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     
     $mail->setFrom($username, 'School Publications');
 //		$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
-    $mail->addAddress($email);               			  // Name is optional
-	$mail->addReplyTo('orders@schoolpub.com', 'School Publications');
+    $mail->AddAddress($email);
+	// $mail->addReplyTo('orders@schoolpub.com', 'School Publications');
 //		$mail->addCC('cc@example.com');
-	$mail->addBCC('orders@schoolpub.com');
+	$mail->addBCC('spc.schoolpub@gmail.com');
 
     // $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
 //		$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
@@ -140,7 +140,7 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
         // echo 'Message has been sent';
         $result['response'] = 1;
     }
-
+    
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: PUT, GET, POST');
     header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
