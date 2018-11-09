@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>School Publications Company :: Your complete source for printing newspapers, year books, literary magazines, publications and more!</title>
+<meta NAME="title" content="School Publications Company :: Your complete source for printing  newspapers, yearbooks, literary magazines, publications and more!">
+<meta NAME="description" CONTENT="School Publications Company :: Your complete source for printing  newspapers, newsletters yearbooks, literary magazines, publications and more! Full color, single color, or black & white printing, specializing in publications for newspapers, school newspaper printing, literary magazines, year books, and memory books, and other school related publications.">
+<meta NAME="keywords" CONTENT="school newspapers, school newspaper publishing, newsletters, yearbooks, memory books, books, literary magazines, printing, publishing, full color.">
+<meta NAME="resource-type" content="document">
+<meta HTTP-EQUIV="pragma" content="no-cache">
+<meta NAME="revisit-after"content="15">
+<meta NAME="copyright" content="2010">
+<meta NAME="author" content="School Publications Company, www.schoolpub.com">
+<meta NAME="language"content="ENGLISH">
+<link rel="stylesheet" href="includes/spcstyle.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+body {
+	background-color: #F0F0F0;
+	background-image: url(images/bg_body-black.png);
+	margin-left: 10px;
+	background-repeat: repeat-x;
+}
+.Orange {
+	color: #060;
+	text-align: center;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 24px;
+}
+a:link {
+	color: #00F;
+}
+a:visited {
+	color: #06F;
+}
+.Subhead {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 16px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	text-transform: none;
+	color: #900;
+}
+.OrderForm {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	text-transform: none;
+	color: #00F;
+	text-align: right;
+}
+.OrderFormInfo {
+	text-align: left;
+}
+.jungle_head {	color: #F00;
+	font-family: "Comic Sans MS", Tahoma, sans-serif;
+	font-size: 24px;
+	/*                font-style: normal;
+                line-height: normal;*/
+                font-weight: bold;
+	/*                font-variant: normal;
+                text-transform: none;
+                text-decoration: none;*/
+                text-align: center;
+}
+</style>
+</head>
+<body>
+<p>
+  <script>
+function checkForm() {
+	if (document.online_request_form.SchoolName.value=="") {
+		alert('You must fill out the School Name field');
+		document.online_request_form.SchoolName.focus();
+		return false;
+	} else if (document.online_request_form.AdvisorName.value=="") {
+		alert('You must fill out the Advisor Name field');
+		document.online_request_form.AdvisorName.focus();
+		return false;
+	} else if (document.online_request_form.SchoolAddress.value=="") {
+		alert('You must fill out the School Address field');
+		document.online_request_form.SchoolAddress.focus();
+		return false;
+	} else if (document.online_request_form.City.value=="") {
+		alert('You must fill out the City field');
+		document.online_request_form.City.focus();
+	return false;
+	} else if (document.online_request_form.State.value=="") {
+		alert('You must fill out the State field');
+		document.online_request_form.State.focus();
+		return false;
+	} else if (document.online_request_form.Zip.value=="") {
+		alert('You must fill out the Zip Code field');
+		document.online_request_form.Zip.focus();
+		return false;
+	} else if (document.online_request_form.PhoneNum.value=="") {
+		alert('You must fill out the Phone Number with Area Code field');
+		document.online_request_form.PhoneNum.focus();
+		return false;
+	} else if (document.online_request_form.email.value=="") {
+		alert('You must fill out the School Email field');
+		document.online_request_form.email.focus();
+		return false;
+	} else if (document.online_request_form.YourName.value=="") {
+		alert('You must fill out the Your Name field');
+		document.online_request_form.YourName.focus();
+		return false;
+	} else {
+		return true;
+	}
+}
+</script></p>
+<form action="emailsender-uploads.php" method="POST" name="online_request_form" onSubmit="return checkForm();">
+<!--<input type="hidden" name="recipient" value="leads@schoolpub.com">-->
+<input type="hidden" name="recipient" value="leads@schoolpub.com">
+<input type="hidden" name="subject" value="Online Request Form">
+<input type="hidden" name="redirect" value="thankyou.asp">
+<input type="hidden" name="required" value="SchoolName, AdvisorName, SchoolAddress, City, State, Zip, PhoneNum, email,YourName, FileList" >
+  <table width="900" border="0" align="center" cellpadding="3">
+    <tr>
+      <td colspan="2" align="center"><h2>Job Information</h2></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><strong>Privacy Policy</strong></td>
+    </tr>
+    <tr>
+      <td colspan="2">Complet the job information for below. <br>
+      When you are finished click the Submit Info button at the bottom of the form, which will redirect you to the Upload Files form.</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="yellow"><span class="Subhead">School Information</span></td>
+    </tr>
+    <tr>
+      <td width="223" class="OrderForm">&nbsp;</td>
+      <td width="471" align="left" class="OrderFormInfo">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="OrderForm">School Name:</td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="40" name="SchoolName" id="SchoolName"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Advisor's Name: </td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="40" name="AdvisorName"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">School Address: </td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="40" name="SchoolAddress"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">City:</td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="40" name="City"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">State:</td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="6" name="State"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Zip Code:</td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="12" name="Zip"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm"><span class="yellow">Phone:</span> (please include area code)</td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="25" name="PhoneNum"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm"><span class="yellow">Fax:</span> (please include area code)</td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="25" name="FaxNum"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">School Email Address:</td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="40" name="email"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Your Name: </td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="40" name="YourName"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Your Email:</td>
+      <td align="left" class="OrderFormInfo"><input type="text" size="40" name="YourEmail"></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="Subhead">Complete Billing Section If Different Than Above</td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Billing Name:</td>
+      <td class="OrderFormInfo"><input type="text" size="40" name="BillingName" id="BillingName"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Billing Address:</td>
+      <td class="OrderFormInfo"><input type="text" size="40" name="BillingAddress" id="BillingAddress"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Billing City, ST ZIP:</td>
+      <td class="OrderFormInfo"><input type="text" size="40" name="BillingCitySTZip" id="BillingCitySTZip"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Purchase Order Number:</td>
+      <td class="OrderFormInfo"><input type="text" size="40" name="PONumber" id="PONumber"></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="Subhead">Job Information</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="yellow"><hr width="50%" size="4"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Publication Name:</td>
+      <td class="OrderFormInfo"><input type="text" size="60" name="PubName" id="PubName"></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="yellow"><hr width="50%" size="3"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Page Size:</td>
+      <td class="OrderFormInfo"><label>
+        <select name="PaperSize" id="PaperSize">
+          <option value="Tabloid" selected>Tabloid (11 x 17)</option>
+          <option value="Newsletter">Newsletter (8.5 x 11)</option>
+        </select>
+      </label></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="yellow"><hr width="50%" size="3"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Paper Stock:</td>
+      <td class="OrderFormInfo"><label>
+        <select name="PaperStock" id="PaperStock">
+          <option value="Newsprint" selected>Newsprint (tabloid only)</option>
+          <option value="White Offset">White Offset</option>
+          <option value="Glossy">Glossy (newsletter only)</option>
+        </select>
+      </label></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="yellow"><hr width="50%" size="3"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Number Of Copies:</td>
+      <td class="OrderFormInfo"><input type="text" size="12" name="NoCopies" id="NoCopies"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Number Of Pages:</td>
+      <td class="OrderFormInfo"><input type="text" size="12" name="NoPages" id="NoPages"></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="yellow"><hr width="50%" size="3"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Send PDF Proof:</td>
+      <td class="OrderFormInfo"><label>
+        <select name="SendProof" id="SendProof">
+            <option value="Yes">Yes</option>
+            <option value="No" selected>No</option>
+          </select>
+      </label></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Color Pages:</td>
+      <td class="OrderFormInfo"><label>
+        <select name="ColorPages" id="ColorPages">
+          <option value="None" selected>None</option>
+          <option value="FBC 4/1">Front, Back, Center (4 pages) - $250</option>
+          <option value="Front-Back">Front and Back (2 pages) - $250</option>
+          <option value="FBC and Insides * pages - 4/4">Front, Back, Inside Covers, 4 Center Pages (8 pages) - $375</option>
+          <option value="Full Color">Full Color (call for pricing)</option>
+        </select>
+      </label></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Promo Code:</td>
+      <td class="OrderFormInfo"><input type="text" size="20" name="PromoCode" id="PromoCode"></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="Subhead">Shipping Information</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="yellow"><hr width="50%" size="3"></td>
+    </tr>
+    <tr>
+    <td class="OrderForm">Ship To:</td>
+      <td class="OrderFormInfo"><label>
+        <select name="ShipTo" id="ShipTo">
+          <option value="School Address" selected>School Address</option>
+          <option value="Billing Address">Billing Address</option>
+        </select>
+      </label></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="yellow"><hr width="50%" size="3"></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Ship Via:</td>
+      <td class="OrderFormInfo"><label>
+        <select name="ShipVia" id="ShipVia">
+          <option value="Ground" selected>Ground (no shipping charge)</option>
+          <option value="Next Day Saver">Next Day Anytime</option>
+          <option value="Next Day AM">Next Day AM (approx 10:30)</option>
+          <option value="Next Day Early">Next Day Early (approx 8:30 am)</option>
+        </select> 
+        shipping chargess are in addition to printing prices
+      </label></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">List Of Files You Are Uploading:</td>
+      <td><textarea name="FileList" cols="50" rows="4" class="OrderFormInfo" id="FileList" style="width:100%;"></textarea></td>
+    </tr>
+    <tr>
+      <td class="OrderForm">Special Instructions:</td>
+      <td><textarea name="SpecialInstructions" cols="50" rows="4" class="OrderFormInfo" id="SpecialInstructions" style="width:100%;"></textarea></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="OrderForm"><hr width="50%"></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="h2">Click The <em>Submit Info And Go To Uploads Page</em> Button To Send Your Information <br>
+      And Go To The Uploads Page To Send Your Files</td>
+    </tr>
+  </table>
+  <p class="OrderForm">&nbsp;</p>
+  <p>
+    <input type="submit" value="Submit Info And Go To Uploads Page" onClick="checkForm();">
+    <input style="margin-left:30px;" type="reset" value="Reset Form">
+  </p>
+  <p>&nbsp;</p>
+</form>
+</body>
+</html>

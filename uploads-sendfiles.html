@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+
+<head>
+	<title>SPC OnLine Order Form</title>
+	<link rel="stylesheet" href="includes/spcstyle.css">
+	<style type="text/css">
+		/*	#PleaseWait {position:absolute;top:60px;left:-10000px; width:100%; text-align:center;}
+	#UploadForm {position:absolute;top:60px;left:0px; width:100%; text-align:center;}*/
+
+		#PleaseWait {
+			display: none;
+			text-align: center;
+		}
+
+		#XUploadForm {
+			display: block;
+			text-align: center;
+		}
+
+		.upandaway {
+			position: absolute;
+			top: -10000px;
+			height: 100px;
+		}
+
+		.here {}
+
+		.leftcolumn {
+			width: 200px;
+		}
+
+		.std {
+			width: 300px;
+		}
+
+		.city {
+			width: 200px;
+		}
+
+		.state {
+			width: 30px;
+		}
+
+		.zip {
+			width: 70px;
+		}
+
+		.phone {
+			width: 150px;
+		}
+
+		fieldset {
+			margin-top: 15px;
+			border: solid 1px #897;
+			padding: 0px 10px 10px 10px;
+		}
+
+		legend {
+			font-weight: bold;
+			font-size: 14px;
+			font-family: Arial, Verdana, sans-serif;
+			color: #060;
+		}
+
+		body {
+			background-color: #FFF;
+			background-image: url(images/bg_body-black.png);
+			background-repeat: repeat-x;
+		}
+
+		.jungle_head {
+			color: #F00;
+			font-family: "Comic Sans MS", Tahoma, sans-serif;
+			font-size: 24px;
+			/*                font-style: normal;
+                line-height: normal;*/
+			font-weight: bold;
+			/*                font-variant: normal;
+                text-transform: none;
+                text-decoration: none;*/
+			text-align: center;
+		}
+	</style>
+	<!--#include file="includes/form_functions.asp"-->
+</head>
+
+<body class="content">
+	<!--div style="position:fixed;top:100px left:100px;"><a href="javascript:showWaitMsg();">Show Msg</a> | <a href="javascript:hideWaitMsg();">Hide Msg</a></div-->
+	<div id="UploadForm">
+		<!--<form action="HTTP://64.78.50.5/spcUpload/Upload.aspx" method="post" enctype="multipart/form-data" onSubmit="return Validate();" name="form1" id="form1">-->
+
+		<form action="php_upload.php" Xaction="http://www.schoolpub.com/SPCUpload/upload" method="post" enctype="multipart/form-data"
+		 onSubmit="return Validate();" name="form1" id="form1">
+
+
+			<div style="width:600px;margin:0px auto 0px auto;text-align:left;">
+				<h3>SPC OnLine Upload Form</h3>
+				<p>* indicates required field.</p>
+
+				<fieldset>
+					<legend></legend>
+				</fieldset>
+				<fieldset>
+					<legend>Files to Upload</legend>
+					<p>
+						<b>You may wish to compress your files to save transmission time. Files may be compressed as .zip or .sit files. PC users
+							can use WinZip to create .zip files; Mac users should use Stuffit to create either .sit files or .zip (preferred)
+							archives to prevent file corruption.</b>
+					</p>
+					<table border="0" cellpadding="20" cellspacing="0" ID="Files">
+						<tr>
+							<td style="text-align:center;border-right:solid 1px #C4B99D">&nbsp;</td>
+							<td>
+								<input class="std" type="File" name="FILE1">
+								<br>
+								<input class="std" type="File" name="FILE2">
+								<br>
+								<input class="std" type="File" name="FILE3">
+								<p style="color:#F00; font-weight: bold;">
+									<b>MAXIMUM FILE SIZE IS 64 MB!</b>
+									<br> Files larger than 64 Mb will be rejected by the server! If you attach multiple files, the combined size can be
+									no more than 64 MB.
+									<br> Call us if you need assistance.</p>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				<p align="center">
+					<input type="submit" value=" SUBMIT REQUEST NOW " name="Submit" id="Submit">
+				</p>
+				<div style="position:absolute;top:-5000px;">
+					<input type="text" name="cc_SHIPPINGCHARGES" id="cc_SHIPPINGCHARGES">
+				</div>
+
+			</div>
+		</form>
+	</div>
+	&nbsp;
+	<div id="PleaseWait">
+		<EMBED src="pics/spcpleasewait.swf" Flashvars="" quality=high bgcolor=#E0CA99 WIDTH=550 HEIGHT=200 TYPE="application/x-shockwave-flash"
+		 PLUGINSPAGE="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"></EMBED>
+	</div>
+</body>
+
+</html>

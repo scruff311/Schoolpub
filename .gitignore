@@ -1,8 +1,13 @@
 /*
 !.gitignore
-!lit-mag.html
-!lit-mag-pricing.html
-!lit-mag-submit.php
+
+# General
+!*.html
+!*.php
+!PHPMailer_5.2.0/
+!includes/
+
+# React
 !react-apps/
 react-apps/*
 !react-apps/.eslintrc.json
