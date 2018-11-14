@@ -548,9 +548,7 @@ class LitMag extends Component {
         <h1 className={classes.DarkGreen}>{title}</h1>
         {!this.isOrderForm() ? (
           <h4 className={classes.PricingHeader}>
-            SPC has the lowest magazine prices in the industry and the fastest
-            production time, with just a 5 business day turnaround (plus
-            shipping time).
+            SPC has the lowest magazine prices in the industry and the fastest production time, with just a 1-3 business days (plus shipping time) for a news magazine and 1-5 business days (plus shipping time) for a literary magazine.
           </h4>
         ) : null}
         <Form horizontal onSubmit={this.handleSubmitOrder}>
