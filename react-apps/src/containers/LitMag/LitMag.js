@@ -84,6 +84,7 @@ class LitMag extends Component {
     price: {
       promo: '',
       total: 0,
+      original: 0,
     },
     schoolInfo: {
       name: '',
@@ -164,6 +165,7 @@ class LitMag extends Component {
       // when these fields change we update the price. doing this here prevents an infinite loop
       let price = { ...this.state.price };
       price.total = updatedPrice['total'];
+      price.original = updatedPrice['original'];
       this.updatePromoField(updatedPrice['promo-applied']);
       this.setState({
         price,
@@ -548,9 +550,7 @@ class LitMag extends Component {
         <h1 className={classes.DarkGreen}>{title}</h1>
         {!this.isOrderForm() ? (
           <h4 className={classes.PricingHeader}>
-            SPC has the lowest magazine prices in the industry and the fastest
-            production time, with just a 5 business day turnaround (plus
-            shipping time).
+            SPC has the lowest magazine prices in the industry and the fastest production time, with just a 1-3 business days (plus shipping time) for a news magazine and 1-5 business days (plus shipping time) for a literary magazine.
           </h4>
         ) : null}
         <Form horizontal onSubmit={this.handleSubmitOrder}>
@@ -569,6 +569,7 @@ class LitMag extends Component {
             price={{
               label: 'Total:',
               value: this.state.price.total,
+              original: this.state.price.original,
             }}
             footer={[
               'Ground shipping is included in the price.',
