@@ -121,6 +121,7 @@ class FormField extends Component {
 
     return (
       <Aux>
+        {successAlert}
         <FormGroup controlId={this.props.id}>
           <Col componentClass={ControlLabel} sm={3}>
             {label}
@@ -128,7 +129,6 @@ class FormField extends Component {
           <Col sm={this.props.width}>{control}</Col>
         </FormGroup>
         {errorAlert}
-        {successAlert}
       </Aux>
     );
   }

@@ -55,6 +55,7 @@ const horizontalFormSection = props => {
         key={props.stateData + '_price'}
         labelText={props.price.label}
         price={props.price.value}
+        original={props.price.original}
       />
     );
   }

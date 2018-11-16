@@ -84,6 +84,7 @@ class LitMag extends Component {
     price: {
       promo: '',
       total: 0,
+      original: 0,
     },
     schoolInfo: {
       name: '',
@@ -164,6 +165,7 @@ class LitMag extends Component {
       // when these fields change we update the price. doing this here prevents an infinite loop
       let price = { ...this.state.price };
       price.total = updatedPrice['total'];
+      price.original = updatedPrice['original'];
       this.updatePromoField(updatedPrice['promo-applied']);
       this.setState({
         price,
@@ -567,6 +569,7 @@ class LitMag extends Component {
             price={{
               label: 'Total:',
               value: this.state.price.total,
+              original: this.state.price.original,
             }}
             footer={[
               'Ground shipping is included in the price.',

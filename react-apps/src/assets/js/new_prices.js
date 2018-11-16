@@ -79,7 +79,7 @@ export function updateLitMagPrice(pubInfo, price) {
   printingCost += (binding === 'Perfect Bound') ? addPerfectBoundCharge(copies) : 0;
 
   // apply the promo if applicable
-  const finalCost = applyPromo(printingCost, promoCode);
+  const finalCost = applyPromo(promoCode, printingCost, copies, color);
 
   return finalCost;
 }
@@ -100,15 +100,19 @@ function isHemingway(copies, color, pages) {
   return false;
 }
 
-function applyPromo(cost, code) {
+function applyPromo(code, cost, copies, color) {
   const today = new Date();
   const april15 = new Date('04/15/' + today.getFullYear());
 
   if (code.toLowerCase() === 'lm-early' && today < april15) {
-    return {'total': 0.9 * cost, 'promo-applied': 'LM-Early'};
+    return {'total': 0.9 * cost, 'original': cost, 'promo-applied': 'LM-Early'};
+  } else if (code.toLowerCase() === 'lm-4free') {
+    const freePages = (color - 4) < 0 ? color : 4;
+    const freeColor = freePages * copies * colorChargePerPagePerCopy;
+    return {'total': cost - freeColor, 'original': cost, 'promo-applied': 'LM-4Free'};
   }
 
-  return {'total': cost, 'promo-applied': null};
+  return {'total': cost, 'original': cost, 'promo-applied': null};
 }
 
 function poe(copies, cover) {
