@@ -360,3 +360,35 @@ export const defaultFileFields = [
     inline: null,
   },
 ];
+
+// these are fields that we inject into the form based on certain criteria
+export const dependentFields = {
+  pagesToColor: {
+    id: 'pagesToColor',
+    label: 'Which Pages in Color',
+    placeholder: 'Example: 1, 3-6, 10, 12',
+    type: 'text',
+    options: null,
+    width: 4,
+    required: true,
+    error: false,
+    errorMsg: 'Please indicate which pages you would like to be in color.',
+    inline: null,
+  },
+  coverPrinting: {
+    id: 'coverPrinting',
+    label: 'Cover Printing',
+    type: 'check',
+    options: [
+      'Front Cover',
+      'Back Cover',
+      'Inside Front Cover',
+      'Inside Back Cover',
+    ],
+    width: 4,
+    required: true,
+    error: false,
+    errorMsg: 'Please choose which cover printing options you would like.',
+    inline: false,
+  },
+};

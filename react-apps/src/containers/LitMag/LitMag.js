@@ -17,39 +17,8 @@ import {
   defaultPriceFields,
   defaultSchoolInfoFields,
   defaultFileFields,
+  dependentFields,
 } from '../../data/LitMagFormFields';
-
-// these are fields that we inject into the form based on certain criteria
-const dependentFields = {
-  pagesToColor: {
-    id: 'pagesToColor',
-    label: 'Which Pages in Color',
-    placeholder: 'Example: 1, 3-6, 10, 12',
-    type: 'text',
-    options: null,
-    width: 4,
-    required: true,
-    error: false,
-    errorMsg: 'Please indicate which pages you would like to be in color.',
-    inline: null,
-  },
-  coverPrinting: {
-    id: 'coverPrinting',
-    label: 'Cover Printing',
-    type: 'check',
-    options: [
-      'Front Cover',
-      'Back Cover',
-      'Inside Front Cover',
-      'Inside Back Cover',
-    ],
-    width: 4,
-    required: true,
-    error: false,
-    errorMsg: 'Please choose which cover printing options you would like.',
-    inline: false,
-  },
-};
 
 // this is a simple mapping of which state params correspond to which fields
 const formToStateMap = {
@@ -60,9 +29,13 @@ const formToStateMap = {
 };
 
 const initialDefaults = {
+  dimensions: '8.5 x 11',
   copies: 25,
   insidePages: 4,
   colorPages: 0,
+  paperStock: 'Offset',
+  coverStyle: 'Self-Cover',
+  binding: 'Saddle Stitched',
 };
 
 class LitMag extends Component {
@@ -139,13 +112,13 @@ class LitMag extends Component {
     let pubState = { ...this.state.pubInfo };
     pubState = {
       ...pubState,
-      dimensions: '8.5 x 11',
+      dimensions: initialDefaults['dimensions'],
       copies: initialDefaults['copies'],
       insidePages: initialDefaults['insidePages'],
       colorPages: initialDefaults['colorPages'],
-      paperStock: 'Offset',
-      coverStyle: 'Self-Cover',
-      binding: 'Saddle Stitched',
+      paperStock: initialDefaults['paperStock'],
+      coverStyle: initialDefaults['coverStyle'],
+      binding: initialDefaults['binding'],
     };
     this.setState({
       pubInfo: pubState,
