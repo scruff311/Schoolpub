@@ -235,6 +235,7 @@ function createTable($email, $isQuote) {
     
     // price
     $promoCode = $_POST['price_promo'];
+    $distDate = $_POST['price_distDate'];
 	setlocale(LC_MONETARY, 'en_US.UTF-8');
     $total = money_format('%.2n', $_POST['price_total']);
 
@@ -294,6 +295,9 @@ function createTable($email, $isQuote) {
     $totalText = $isQuote ? "Total: " : "Order Total: ";
     $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 14px;'>
                     <b>" . $totalText . $total . "</b></p><br />";
+    // date
+    $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>
+        <b>Distribution Date:</b> " . $distDate . "</p>";
     // promo
     if (!empty($promoCode)) {
         $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>
