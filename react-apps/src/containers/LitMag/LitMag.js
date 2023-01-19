@@ -56,6 +56,7 @@ class LitMag extends Component {
     },
     price: {
       promo: '',
+      distDate: '',
       total: 0,
       original: 0,
     },

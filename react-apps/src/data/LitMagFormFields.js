@@ -155,6 +155,17 @@ export const defaultPriceFields = [
     successMsg: 'The promo code $code was successfully applied!',
     inline: null,
   },
+  {
+    id: 'distDate',
+    label: 'Distribution Date',
+    type: 'date',
+    options: null,
+    width: 3,
+    required: true,
+    error: false,
+    errorMsg: 'Please provide a distribution date.',
+    inline: null,
+  },
 ];
 
 export const defaultSchoolInfoFields = [
