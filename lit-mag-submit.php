@@ -103,7 +103,7 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
 
     // Set SMTP account
     $username = $debugging ? 'kevin.smtp.test@gmail.com' : 'kevin@schoolpub.com';
-    $password = $debugging ? 'ema!ltester' : 'Spc!pass07717';
+    $password = $debugging ? 'ema!ltester' : 'Spc!07717pass';
     $host = $debugging ? 'smtp.gmail.com' : 'localhost';
                                                    
     $mail->isSMTP();                          // Set mailer to use SMTP
@@ -119,7 +119,8 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     $mail->AddAddress($email);
 	// $mail->addReplyTo('orders@schoolpub.com', 'School Publications');
 //		$mail->addCC('cc@example.com');
-	$mail->addBCC('spc.schoolpub@gmail.com');
+	$mail->addBCC('newspapers@schoolpub.com');
+//	$mail->addBCC('spc.schoolpub@gmail.com');
 
     // $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
 //		$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
