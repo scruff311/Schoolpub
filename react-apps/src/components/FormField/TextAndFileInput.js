@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormControl } from 'react-bootstrap';
 
-const textAndFileInput = props => {
+const TextAndFileInput = props => {
   const fileStyle = {
     paddingTop: 7,
   };
@@ -18,4 +18,4 @@ const textAndFileInput = props => {
   );
 };
 
-export default textAndFileInput;
+export default TextAndFileInput;

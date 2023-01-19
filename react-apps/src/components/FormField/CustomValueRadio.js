@@ -1,6 +1,6 @@
 import React from 'react';
 
-const customValueRadio = props => {	
+const CustomValueRadio = props => {	
 	const labelStyle = {
 		paddingLeft: 0
 	};
@@ -29,4 +29,4 @@ const customValueRadio = props => {
   );
 };
 
-export default customValueRadio;
+export default CustomValueRadio;

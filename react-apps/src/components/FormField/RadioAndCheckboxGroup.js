@@ -3,7 +3,7 @@ import { Checkbox, Radio } from 'react-bootstrap';
 import CustomValueRadio from './CustomValueRadio';
 import Aux from '../../hoc/Aux';
 
-const radioAndCheckboxGroup = props => {
+const RadioAndCheckboxGroup = props => {
 	const style = {
 		marginBottom: 7
 	}
@@ -56,4 +56,4 @@ const radioAndCheckboxGroup = props => {
   });
 };
 
-export default radioAndCheckboxGroup;
+export default RadioAndCheckboxGroup;

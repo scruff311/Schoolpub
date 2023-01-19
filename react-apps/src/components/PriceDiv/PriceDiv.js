@@ -3,7 +3,7 @@ import { Grid, Col, Row } from 'react-bootstrap';
 import numeral from 'numeral';
 import classes from './PriceDiv.css';
 
-const priceDiv = props => {
+const PriceDiv = props => {
   let originalPrice = null;
   if (props.price !== props.original) {
     originalPrice = (
@@ -27,4 +27,4 @@ const priceDiv = props => {
   );
 };
 
-export default priceDiv;
+export default PriceDiv;

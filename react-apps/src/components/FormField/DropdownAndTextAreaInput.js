@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormControl } from 'react-bootstrap';
 
-const dropdownAndTextAreaInput = props => {
+const DropdownAndTextAreaInput = props => {
 
   let dropdownOptions = null;
   if (props.type === 'select') {
@@ -25,4 +25,4 @@ const dropdownAndTextAreaInput = props => {
   );
 };
 
-export default dropdownAndTextAreaInput;
+export default DropdownAndTextAreaInput;

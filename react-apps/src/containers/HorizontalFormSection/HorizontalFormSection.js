@@ -4,7 +4,7 @@ import PriceDiv from '../../components/PriceDiv/PriceDiv';
 import Aux from '../../hoc/Aux';
 import classes from './HorizontalFormSection.css';
 
-const horizontalFormSection = props => {
+const HorizontalFormSection = props => {
   const formFields = props.fields.map((field, index) => {
     return (
       <FormField
@@ -72,4 +72,4 @@ const horizontalFormSection = props => {
   );
 };
 
-export default horizontalFormSection;
+export default HorizontalFormSection;
