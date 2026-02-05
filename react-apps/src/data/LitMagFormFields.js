@@ -157,13 +157,13 @@ export const defaultPriceFields = [
   },
   {
     id: 'distDate',
-    label: 'Distribution Date',
+    label: 'Delivery Date',
     type: 'date',
     options: null,
     width: 3,
     required: true,
     error: false,
-    errorMsg: 'Please provide a distribution date.',
+    errorMsg: 'Please provide a delivery date.',
     inline: null,
   },
 ];

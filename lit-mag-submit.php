@@ -1,4 +1,15 @@
 <?php
+    // CORS headers - must be at the very top
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+    
+    // Handle preflight OPTIONS request
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
+        exit();
+    }
+
     ini_set('display_errors',1);
     ini_set('display_startup_errors',1);
     error_reporting(E_ALL);
@@ -7,7 +18,7 @@
 	date_default_timezone_set("America/New_York");
 
 	// switch between debug (local) and live server params
-    $debugging = FALSE;
+    $debugging = TRUE;
     
 	// Confirmation number
 	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), TRUE)), 0, 7));
@@ -89,32 +100,36 @@ function saveFiles($confirm) {
 function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     global $debugging;
 
-    require 'PHPMailer_5.2.0/class.phpmailer.php';    	
-    $mail = new PHPMailer();
+    // PHPMailer 6.x
+    require 'PHPMailer-6.9.1/src/PHPMailer.php';
+    require 'PHPMailer-6.9.1/src/SMTP.php';
+    require 'PHPMailer-6.9.1/src/Exception.php';
+    
+    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
-    //Enable SMTP debugging
-    // 0 = off (for production use)
-    // 1 = client messages
-    // 2 = client and server messages
-    // 3 = verbose debug output
-	$mail->SMTPDebug = $debugging ? 3 : 0;
-    //Ask for HTML-friendly debug output
-	$mail->Debugoutput = 'html';
+    // SMTP debugging (0 = off, 1-3 = verbose) - keep off to not break JSON response
+    $mail->SMTPDebug = 0;
 
     // Set SMTP account
-    $username = $debugging ? 'kevin.smtp.test@gmail.com' : 'kevin@schoolpub.com';
-    $password = $debugging ? 'ema!ltester' : 'Spc!07717pass';
-    $host = $debugging ? 'smtp.gmail.com' : 'localhost';
-                                                   
-    $mail->isSMTP();                          // Set mailer to use SMTP
-    $mail->Host = $host;  					  // Specify main and backup SMTP servers
-    $mail->SMTPAuth = TRUE;                   // Enable SMTP authentication
-    $mail->Username = $username;              // SMTP username
-    $mail->Password = $password;              // SMTP password
-    // $mail->SMTPSecure = 'tls';                // Enable TLS encryption, `ssl` also accepted
-    // $mail->Port = 587;                        // TCP port to connect to
+    if ($debugging) {
+        // Use Mailhog for local testing (no auth needed)
+        $mail->isSMTP();
+        $mail->Host = '127.0.0.1';
+        $mail->Port = 1025;
+        $mail->SMTPAuth = FALSE;
+        $mail->setFrom('orders@schoolpub.com', 'School Publications');
+    } else {
+        // Production settings
+        $mail->isSMTP();
+        $mail->Host = 'localhost';
+        $mail->SMTPAuth = TRUE;
+        $mail->Username = 'kevin@schoolpub.com';
+        $mail->Password = 'Spc!07717pass';
+    }
     
-    $mail->setFrom($username, 'School Publications');
+    if (!$debugging) {
+        $mail->setFrom('kevin@schoolpub.com', 'School Publications');
+    }
 //		$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
     $mail->AddAddress($email);
 	// $mail->addReplyTo('orders@schoolpub.com', 'School Publications');
@@ -130,23 +145,17 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     $mail->Subject = $subject;
     $mail->Body    = $message;
        
-    // echo $username . PHP_EOL;
     $result = ['response' => -1];
-    if (!$mail->send()) {
-        // echo 'Message could not be sent.<br>';
-        // echo 'Mailer Error: ' . $mail->ErrorInfo;
-        $result['response'] = 0;
-    } 
-    else {
-        // echo 'Message has been sent';
+    try {
+        $mail->send();
         $result['response'] = 1;
+    } catch (PHPMailer\PHPMailer\Exception $e) {
+        // Mailer Error: $mail->ErrorInfo
+        $result['response'] = 0;
     }
     
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: PUT, GET, POST');
-    header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
     header('Content-type: application/json');
-    echo json_encode( $result );  
+    echo json_encode($result);  
 }
 
 function sendMail($email, $confirm, $subject, $message) {        
@@ -237,8 +246,7 @@ function createTable($email, $isQuote) {
     // price
     $promoCode = $_POST['price_promo'];
     $distDate = $_POST['price_distDate'];
-	setlocale(LC_MONETARY, 'en_US.UTF-8');
-    $total = money_format('%.2n', $_POST['price_total']);
+    $total = '$' . number_format((float)$_POST['price_total'], 2);
 
     // proof
     $proof = $_POST['files_proof'];
@@ -296,9 +304,16 @@ function createTable($email, $isQuote) {
     $totalText = $isQuote ? "Total: " : "Order Total: ";
     $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 14px;'>
                     <b>" . $totalText . $total . "</b></p><br />";
-    // date
+    // date - format as "February 15, 2026" if valid date provided
+    $formattedDate = $distDate;
+    if (!empty($distDate)) {
+        $dateObj = DateTime::createFromFormat('Y-m-d', $distDate);
+        if ($dateObj) {
+            $formattedDate = $dateObj->format('F j, Y');
+        }
+    }
     $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>
-        <b>Distribution Date:</b> " . $distDate . "</p>";
+        <b>Delivery Date:</b> " . $formattedDate . "</p>";
     // promo
     if (!empty($promoCode)) {
         $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>

@@ -9,7 +9,7 @@ import {
 } from 'react-bootstrap';
 import HorizontalFormSection from '../HorizontalFormSection/HorizontalFormSection';
 import _ from 'lodash';
-import { Dots } from 'react-activity';
+// import { Dots } from 'react-activity';
 import { updateLitMagPrice } from '../../assets/js/new_prices';
 import classes from './LitMag.css';
 import {
@@ -277,13 +277,14 @@ class LitMag extends Component {
 
   postFormToServer = () => {
     const data = this.parseStateIntoJson();
+    console.log(data.forEach((v, k) => console.log(`key: ${k}, value: ${v}`)));
     let header = new Headers({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'multipart/form-data',
     });
 
-    fetch('https://www.schoolpub.com/lit-mag-submit.php', {
-      // fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
+    // fetch('https://www.schoolpub.com/lit-mag-submit.php', {
+    fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
       method: 'POST',
       mode: 'cors',
       header: header,

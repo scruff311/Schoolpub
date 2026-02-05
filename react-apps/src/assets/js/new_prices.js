@@ -5,7 +5,7 @@ const insideCoatedCost = 0.0429;
 const insideOffsetCost = 0.0297;
 const blackClick = 0.0129;
 const colorClick = 0.049;
-const ship = 0.007;
+const ship = 0.007; // eslint-disable-line no-unused-vars
 const coverStock = 0.3;
 const coverBase = 15;
 const base = 175;
@@ -19,8 +19,8 @@ var blackCost = 0;
 var addColorCost = 0;
 var coatedPaperCost = 0;
 var offsetPaperCost = 0;
-var hours = 0;
-var clickCharge = 0;
+var hours = 0; // eslint-disable-line no-unused-vars
+var clickCharge = 0; // eslint-disable-line no-unused-vars
 var hemColorCost = 0;
 
 function calculateGlobals(pages, copies, color, cover) {
@@ -166,7 +166,7 @@ function calcHardCover(copies) {
   else return copies * 8.7;
 }
 
-function updatePrice(sender) {
+function updatePrice(sender) { // eslint-disable-line no-unused-vars
   //    var shipping = 0;
   //    var misc = 0;
   var printingCost = 0;
