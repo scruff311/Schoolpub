@@ -1,4 +1,10 @@
 <?php
+    // ============================================================
+    // DEBUG TOGGLE - set to TRUE for local testing with Mailhog
+    // ============================================================
+    $debugging = FALSE;
+    // ============================================================
+
     // CORS headers - must be at the very top
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -10,24 +16,22 @@
         exit();
     }
 
-    ini_set('display_errors',1);
-    ini_set('display_startup_errors',1);
-    error_reporting(E_ALL);
-    ini_set("memory_limit", "-1");
-
-	date_default_timezone_set("America/New_York");
-
-	// switch between debug (local) and live server params
-    $debugging = TRUE;
+    // Error display - only show in debug mode
+    if ($debugging) {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+    } else {
+        ini_set('display_errors', 0);
+        ini_set('display_startup_errors', 0);
+        error_reporting(0);
+    }
     
-	// Confirmation number
-	$confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), TRUE)), 0, 7));
-
-    // Set for remote server. Remove for localhost testing.
-    // if (!$debugging) {
-    //     ini_set("SMTP", "smtp.schoolpub.com");
-    //     ini_set("sendmail_from", "orders@schoolpub.com");
-    // }
+    ini_set("memory_limit", "-1");
+    date_default_timezone_set("America/New_York");
+    
+    // Confirmation number
+    $confirm = strtoupper("SPC" . substr(md5(uniqid(rand(), TRUE)), 0, 7));
 
     $isQuote = filter_var ($_POST['isQuote'], FILTER_VALIDATE_BOOLEAN);
 
@@ -40,13 +44,7 @@
     }
     $email = $_POST["schoolInfo_email"];
     $message = buildMessage($email, $confirm, $isQuote);
-    // // Send confirmation email - use PHP mail on production server, PHPMailer on testing environment
-    // if (!$debugging) {
-    //     sendMail($email, $confirm, $subject, $message);
-    // }
-    // else {
-        sendMailWithPhpMailer($email, $confirm, $subject, $message);
-    // }
+    sendMailWithPhpMailer($email, $confirm, $subject, $message);
 		
 function saveFiles($confirm) {
 	$filenames = array();
@@ -106,51 +104,37 @@ function sendMailWithPhpMailer($email, $confirm, $subject, $message) {
     require 'PHPMailer-6.9.1/src/Exception.php';
     
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+    $mail->isSMTP();
+    $mail->isHTML(true);
+    $mail->SMTPDebug = 0; // Keep off to not break JSON response
 
-    // SMTP debugging (0 = off, 1-3 = verbose) - keep off to not break JSON response
-    $mail->SMTPDebug = 0;
-
-    // Set SMTP account
+    // SMTP settings based on environment
     if ($debugging) {
-        // Use Mailhog for local testing (no auth needed)
-        $mail->isSMTP();
+        // Local testing with Mailhog (no auth needed)
         $mail->Host = '127.0.0.1';
         $mail->Port = 1025;
-        $mail->SMTPAuth = FALSE;
-        $mail->setFrom('orders@schoolpub.com', 'School Publications');
+        $mail->SMTPAuth = false;
     } else {
-        // Production settings
-        $mail->isSMTP();
+        // Production
         $mail->Host = 'localhost';
-        $mail->SMTPAuth = TRUE;
+        $mail->SMTPAuth = true;
         $mail->Username = 'kevin@schoolpub.com';
         $mail->Password = 'Spc!07717pass';
     }
     
-    if (!$debugging) {
-        $mail->setFrom('kevin@schoolpub.com', 'School Publications');
-    }
-//		$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
-    $mail->AddAddress($email);
-	// $mail->addReplyTo('orders@schoolpub.com', 'School Publications');
-//		$mail->addCC('cc@example.com');
-	$mail->addBCC('newspapers@schoolpub.com');
-//	$mail->addBCC('spc.schoolpub@gmail.com');
-
-    // $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-//		$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-//		$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-    $mail->isHTML(TRUE);                                  // Set email format to HTML
+    // Email addresses
+    $mail->setFrom('orders@schoolpub.com', 'School Publications');
+    $mail->addAddress($email);
+    $mail->addBCC('newspapers@schoolpub.com');
     
     $mail->Subject = $subject;
-    $mail->Body    = $message;
+    $mail->Body = $message;
        
     $result = ['response' => -1];
     try {
         $mail->send();
         $result['response'] = 1;
     } catch (PHPMailer\PHPMailer\Exception $e) {
-        // Mailer Error: $mail->ErrorInfo
         $result['response'] = 0;
     }
     

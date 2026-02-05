@@ -277,14 +277,16 @@ class LitMag extends Component {
 
   postFormToServer = () => {
     const data = this.parseStateIntoJson();
-    console.log(data.forEach((v, k) => console.log(`key: ${k}, value: ${v}`)));
     let header = new Headers({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'multipart/form-data',
     });
 
-    // fetch('https://www.schoolpub.com/lit-mag-submit.php', {
-    fetch('http://localhost:8888/schoolpub/lit-mag-submit.php', {
+    // Toggle between production and local testing:
+    const API_URL = 'https://www.schoolpub.com/lit-mag-submit.php';
+    // const API_URL = 'http://localhost:8888/schoolpub/lit-mag-submit.php';
+
+    fetch(API_URL, {
       method: 'POST',
       mode: 'cors',
       header: header,
@@ -294,7 +296,6 @@ class LitMag extends Component {
         return res.json();
       })
       .then(data => {
-        console.log('Request successful: ', data.response);
         this.setState({
           submitStatus: data.response === 1 ? true : false,
           submitDisabled: data.response === 1 ? true : false,
@@ -302,7 +303,7 @@ class LitMag extends Component {
         });
       })
       .catch(err => {
-        console.log('fetch error: ', err);
+        console.error('Form submission error:', err);
         this.setState({
           submitStatus: false,
           submitDisabled: false,
