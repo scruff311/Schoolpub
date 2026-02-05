@@ -139,6 +139,17 @@ export const defaultPublicationFields = [
     errorMsg: null,
     inline: null,
   },
+  {
+    id: 'distDate',
+    label: 'Distribution Date',
+    type: 'date',
+    options: null,
+    width: 3,
+    required: true,
+    error: false,
+    errorMsg: 'Please provide a distribution date.',
+    inline: null,
+  },
 ];
 
 export const defaultPriceFields = [
@@ -153,17 +164,6 @@ export const defaultPriceFields = [
     errorMsg: 'Sorry, the promo code you entered is invalid.',
     success: false,
     successMsg: 'The promo code $code was successfully applied!',
-    inline: null,
-  },
-  {
-    id: 'distDate',
-    label: 'Delivery Date',
-    type: 'date',
-    options: null,
-    width: 3,
-    required: true,
-    error: false,
-    errorMsg: 'Please provide a delivery date.',
     inline: null,
   },
 ];

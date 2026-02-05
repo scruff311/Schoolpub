@@ -245,8 +245,10 @@ function createTable($email, $isQuote) {
     
     // price
     $promoCode = $_POST['price_promo'];
-    $distDate = $_POST['price_distDate'];
     $total = '$' . number_format((float)$_POST['price_total'], 2);
+    
+    // distribution date (from pubInfo)
+    $distDate = $_POST['pubInfo_distDate'];
 
     // proof
     $proof = $_POST['files_proof'];
@@ -313,7 +315,7 @@ function createTable($email, $isQuote) {
         }
     }
     $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>
-        <b>Delivery Date:</b> " . $formattedDate . "</p>";
+        <b>Distribution Date:</b> " . $formattedDate . "</p>";
     // promo
     if (!empty($promoCode)) {
         $table .= "<p style='color: #212a2c; font-family: Verdana, sans-serif; font-size: 11px;'>

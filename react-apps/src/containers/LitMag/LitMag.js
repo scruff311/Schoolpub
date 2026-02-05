@@ -53,10 +53,10 @@ class LitMag extends Component {
       coverPrinting: [],
       binding: '',
       instructions: '',
+      distDate: '',
     },
     price: {
       promo: '',
-      distDate: '',
       total: 0,
       original: 0,
     },
